@@ -1,7 +1,7 @@
+import { Cart } from "@/models/cart";
 import { revalidateTag } from "next/cache";
 
-
-export async function getCartAction() {
+export async function getCartAction(): Promise<Cart[] | null> {
 	const cart = null; // TODO: Fetch cart from the API
 	if (cart) {
 		return structuredClone(cart);
