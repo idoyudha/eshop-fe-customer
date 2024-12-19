@@ -6,7 +6,7 @@ export async function getCartAction(): Promise<Cart[] | null> {
 	if (cart) {
 		return structuredClone(cart);
 	}
-	return null;
+	return cart;
 }
 export async function addToCartAction(formData: FormData) {
 	const productId = formData.get("productId");
