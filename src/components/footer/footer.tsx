@@ -33,51 +33,56 @@ const sections = [
 export async function Footer() {
 	return (
 		<footer className="w-full bg-neutral-50 p-6 text-neutral-800 md:py-12">
-			<div className="container flex max-w-7xl flex-row flex-wrap justify-center gap-16 text-sm sm:justify-between">
-				<div className="">
-					<div className="flex w-full max-w-sm flex-col gap-2">
-						<h3 className="font-semibold">Newsletter</h3>
-						<Newsletter />
+			<div className="mx-auto flex max-w-7xl flex-col gap-16 px-4 md:px-6">
+				<div className="grid grid-cols-1 gap-16 md:grid-cols-3">
+				<div className="flex items-start">
+					<div className="flex w-full flex-col gap-2">
+					<h3 className="font-semibold">Newsletter</h3>
+					<Newsletter />
 					</div>
 				</div>
 
-				<nav className="grid grid-cols-2 gap-16">
-					{sections.map((section) => (
-						<section key={section.header}>
-							<h3 className="mb-2 font-semibold">{section.header}</h3>
-							<ul role="list" className="grid gap-1">
-								{section.links.map((link) => (
-									<li key={link.label}>
-										<EshopLink className="underline-offset-4 hover:underline" href={link.href}>
-											{link.label}
-										</EshopLink>
-									</li>
-								))}
-							</ul>
-						</section>
-					))}
-				</nav>
-			</div>
-			<div className="container mt-8 flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-neutral-500 md:flex-row">
+				{sections.map((section, index) => (
+					<section key={section.header}>
+					<h3 className="mb-2 font-semibold">{section.header}</h3>
+					<ul role="list" className="grid gap-1">
+						{section.links.map((link) => (
+						<li key={link.label}>
+							<EshopLink 
+							className="underline-offset-4 hover:underline" 
+							href={link.href}
+							>
+							{link.label}
+							</EshopLink>
+						</li>
+						))}
+					</ul>
+					</section>
+				))}
+				</div>
+
+				{/* Footer Bottom */}
+				<div className="flex flex-col items-center justify-between gap-4 border-t border-neutral-200 pt-8 text-sm text-neutral-500 md:flex-row">
 				<div>
-					<p>© 2024 Your Next Store</p>
-					<p>Delightful commerce for everyone</p>
+					<p>© 2025 Eshop</p>
+					<p>Car ecommerce</p>
 				</div>
 				<div className="flex items-center gap-4">
 					<EshopLink
-						className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
-						href="https://x.com/zaiste"
+					className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
+					href="https://x.com/zaiste"
 					>
-						<TwitterIcon className="h-4 w-4" /> @zaiste
-						<span className="sr-only">Twitter</span>
+					<TwitterIcon className="h-4 w-4" /> @eshop
+					<span className="sr-only">Twitter</span>
 					</EshopLink>
 					<EshopLink
-						className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
-						href="https://x.com/typeofweb"
+					className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
+					href="https://x.com/typeofweb"
 					>
-						<TwitterIcon className="h-4 w-4" /> @typeofweb
-						<span className="sr-only">Twitter</span>
+					<TwitterIcon className="h-4 w-4" /> @eshop
+					<span className="sr-only">Twitter</span>
 					</EshopLink>
+				</div>
 				</div>
 			</div>
 		</footer>

@@ -8,7 +8,7 @@ export const Nav = async () => {
 		<header className="z-50 py-4 sticky top-0 bg-white/90 backdrop-blur-sm nav-border-reveal">
 			<div className="mx-auto flex max-w-7xl items-center gap-2 px-4 flex-row sm:px-6 lg:px-8">
 				<EshopLink href="/">
-					<h1 className="-mt-0.5 whitespace-nowrap text-xl font-bold">Your Next Store</h1>
+					<h1 className="-mt-0.5 whitespace-nowrap text-xl font-bold">Eshop</h1>
 				</EshopLink>
 
 				<div className="max-w-full flex flex-shrink w-auto sm:mr-auto overflow-auto max-sm:order-2">
