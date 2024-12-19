@@ -1,3 +1,5 @@
+"use client"
+
 import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { Cart } from "@/models/cart";
 import { useOptimistic } from "react";
