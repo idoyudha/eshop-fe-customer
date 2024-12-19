@@ -19,3 +19,25 @@ export const formatMoney = ({ price, currency }: Money & { locale?: string }) =>
 		currency
 	}).format(price);
 };
+
+export const slugify = (text: string) => {
+	return text
+		.toString() // Cast to string (optional)
+		.normalize("NFKD") // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
+		.toLowerCase() // Convert the string to lowercase letters
+		.trim() // Remove whitespace from both sides of a string (optional)
+		.replace(/\s+/g, "-") // Replace spaces with -
+		.replace(/[^\w-]+/g, "") // Remove all non-word chars
+		.replace(/_/g, "-") // Replace _ with -
+		.replace(/--+/g, "-") // Replace multiple - with single -
+		.replace(/-$/g, ""); // Remove trailing -
+};
+
+export const capitalize = (str: string) => (str[0] ? str[0].toUpperCase() + str.slice(1) : "");
+
+export const deslugify = (slug: string) => {
+	return slug
+		.split("-")
+		.map((part) => capitalize(part))
+		.join(" ");
+};
