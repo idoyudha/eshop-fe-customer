@@ -3,6 +3,7 @@ export interface Cart {
     user_id: string;
     product_id: string;
     product_name: string;
+    product_image: string;
     product_price: number;
     product_quantity: number;
     note: string;

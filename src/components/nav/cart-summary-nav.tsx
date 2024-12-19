@@ -1,4 +1,4 @@
-import { formatMoney } from "@/lib/utils";
+import { calculateCartTotalItems, calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { ShoppingBagIcon } from "lucide-react";
 import { Suspense } from "react";
 import { CartLink } from "./cart-link";
@@ -28,8 +28,8 @@ const CartSummaryNavInner = async () => {
 		return <CartFallback />;
 	}
 
-	const total = carts.reduce((acc, cart) => acc + (cart.product_price * cart.product_quantity), 0);
-	const totalItems = carts.reduce((acc, cart) => acc + cart.product_quantity, 0);
+	const totalPrice = calculateCartTotalPrice(carts);
+	const totalItems = calculateCartTotalItems(carts);
 
 	return (
 		<TooltipProvider>
@@ -45,7 +45,7 @@ const CartSummaryNavInner = async () => {
 							<span className="sr-only">
 								{"Total"}:{" "}
 								{formatMoney({
-									price: total,
+									price: totalPrice,
 									currency: "IDR",
 								})}
 							</span>
@@ -55,7 +55,7 @@ const CartSummaryNavInner = async () => {
 				<TooltipContent side="left" sideOffset={25}>
 					<p>Total Items { totalItems }</p>
 					<p>
-						{"Total"}: {formatMoney({ price: total, currency: "IDR" })}
+						{"Total"}: {formatMoney({ price: totalPrice, currency: "IDR" })}
 					</p>
 				</TooltipContent>
 			</Tooltip>

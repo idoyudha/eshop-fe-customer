@@ -1,3 +1,4 @@
+import { Cart } from "@/models/cart";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -41,3 +42,11 @@ export const deslugify = (slug: string) => {
 		.map((part) => capitalize(part))
 		.join(" ");
 };
+
+export const calculateCartTotalPrice = (cart : Cart[]) => {
+	return cart.reduce((acc, item) => acc + item.product_price * item.product_quantity, 0);
+}
+
+export const calculateCartTotalItems = (cart : Cart[]) => {
+	return cart.reduce((acc, item) => acc + item.product_quantity, 0);
+}
