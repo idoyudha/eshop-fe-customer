@@ -6,6 +6,7 @@ export interface Order  {
     items: Product[];
     total: number;
     address: Address;
+    status: string;
 }
 
 interface Address {
