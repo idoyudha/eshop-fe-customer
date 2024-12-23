@@ -10,7 +10,7 @@ export const ProductList = async ({ products }: { products: Product[] }) => {
 				{products.map((product, idx) => {
 					return (
 						<li key={product.id} className="group">
-							<EshopLink href={`/product/${product.category_id}`}>
+							<EshopLink href={`/product/${product.name}`}>
 								<article className="overflow-hidden bg-white">
 									{product.imageUrl && (
 										<div className="rounded-lg aspect-square w-full overflow-hidden bg-neutral-100">
