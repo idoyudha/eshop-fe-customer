@@ -9,7 +9,7 @@ export function middleware(req: NextRequest) {
     const isAuthenticated = !!authHeader && authHeader.startsWith('Bearer ');
 
     if ((isCartPath || isOrderPath) && !isAuthenticated) {
-        const response = NextResponse.redirect(new URL('/login', req.url))
+        const response = NextResponse.redirect(new URL('/auth/login', req.url))
         return response
     }
     

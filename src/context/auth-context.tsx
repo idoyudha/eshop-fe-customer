@@ -32,18 +32,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 console.log('session:', session);
                 if (session?.tokens?.accessToken) {
                     const token = session.tokens.accessToken.toString();
-                    window.localStorage.setItem('authToken', token);
+                    // window.localStorage.setItem('authToken', token);
                 }
             } catch (error) {
                 console.error('Error fetching auth session:', error);
-                window.localStorage.removeItem('authToken');
+                // window.localStorage.removeItem('authToken');
             }
         };
     
         if (isAuthenticated) {
             attachAuthHeader();
-        } else {
-            window.localStorage.removeItem('authToken');
         }
     }, [isAuthenticated]);
 
@@ -53,13 +51,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(currentUser);
             setIsAuthenticated(true);
             const session = await fetchAuthSession();
-            if (session?.tokens?.accessToken) {
-                window.localStorage.setItem('authToken', session.tokens.accessToken.toString());
-            }
+            // if (session?.tokens?.accessToken) {
+            //     window.localStorage.setItem('authToken', session.tokens.accessToken.toString());
+            // }
         } catch (error) {
             setUser(null);
             setIsAuthenticated(false);
-            window.localStorage.removeItem('authToken');
+            // window.localStorage.removeItem('authToken');
         } finally {
             setLoading(false);
         }
@@ -87,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             await signOut();
             setUser(null);
             setIsAuthenticated(false);
-            window.localStorage.removeItem('authToken');
+            // window.localStorage.removeItem('authToken');
             router.push('/login');
         } catch (error) {
             console.error('Logout error:', error);
