@@ -1,5 +1,6 @@
 import { EshopLink } from "../eshop-link";
 import { CartSummaryNav } from "./cart-summary-nav";
+import DropdownUser from "./dropdown-user";
 import { NavMenu } from "./nav-menu";
 import { SearchNav } from "./search-nav";
 
@@ -18,6 +19,7 @@ export const Nav = async () => {
 					<SearchNav />
 				</div>
 				<CartSummaryNav />
+				<DropdownUser />
 			</div>
 		</header>
 	);
