@@ -4,6 +4,7 @@ import { useAuth } from "@/context/auth-context";
 import { EshopLink } from "../eshop-link";
 import { Button, buttonVariants } from "../ui/button";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const AuthNav = () => {
     const { isAuthenticated, logout } = useAuth();
@@ -13,6 +14,7 @@ export const AuthNav = () => {
         try {
             setIsLoading(true);
             await logout();
+            toast.success("Logged out successfully");
         } catch (error) {
             console.error('Logout error:', error);
         } finally {

@@ -2,6 +2,7 @@ import { EshopLink } from "@/components/eshop-link";
 import Image from "next/image";
 import EshopConfig from "@/eshop.config";
 import { CategoryBox } from "@/components/category-box";
+import CarImage from "@/images/rav4.jpg";
 
 export const metadata = {
     title: "Eshop Ecommerce",
@@ -30,7 +31,7 @@ export default async function Home() {
 						className="rounded"
 						height={450}
 						width={450}
-						src=""
+						src={CarImage}
 						style={{
 							objectFit: "cover",
 						}}
