@@ -1,3 +1,4 @@
+import useAuthUser from "@/hooks/use-auth-user";
 import { EshopLink } from "../eshop-link";
 import { CartSummaryNav } from "./cart-summary-nav";
 import DropdownUser from "./dropdown-user";
@@ -5,6 +6,7 @@ import { NavMenu } from "./nav-menu";
 import { SearchNav } from "./search-nav";
 
 export const Nav = async () => {
+	const user = useAuthUser();
 	return (
 		<header className="z-50 py-4 sticky top-0 bg-white/90 backdrop-blur-sm nav-border-reveal">
 			<div className="mx-auto flex max-w-7xl items-center gap-2 px-4 flex-row sm:px-6 lg:px-8">
@@ -18,8 +20,15 @@ export const Nav = async () => {
 				<div className="mr-3 ml-auto sm:ml-0">
 					<SearchNav />
 				</div>
-				<CartSummaryNav />
-				<DropdownUser />
+				
+				{!user ? (
+					<></>
+				) : (
+					<div>
+						<CartSummaryNav />
+						<DropdownUser />	
+					</div>	
+				)}
 			</div>
 		</header>
 	);

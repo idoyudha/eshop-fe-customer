@@ -23,7 +23,7 @@ const AccountSendVerificationCode = () => {
             </Button>
             <div className="flex h-8">
                 {response?.errorMessage && (
-                    toast.error(errorMessage, { duration: 5000 })
+                    toast.error(response.errorMessage, { duration: 5000 })
                 )}
             </div>
         </>
