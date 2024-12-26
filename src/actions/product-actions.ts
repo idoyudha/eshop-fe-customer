@@ -1,3 +1,4 @@
+import { Order } from "@/models/order";
 import { Product } from "@/models/product";
 
 export async function getProductAction(id: string): Promise<Product | null> {
