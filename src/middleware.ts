@@ -11,9 +11,9 @@ export async function middleware(request:NextRequest) {
     if (isOnCart && isOnOrder && !authenticated) {
         return NextResponse.redirect(new URL("/auth/login", request.nextUrl))
     }
-    if ((isOnAuthPage || isInLandingPage) && authenticated) {
-        return NextResponse.redirect(new URL("/", request.nextUrl))
-    }
+    // if ((isOnAuthPage || isInLandingPage) && authenticated) {
+    //     return NextResponse.redirect(new URL("/", request.nextUrl))
+    // }
     return response
 }
 

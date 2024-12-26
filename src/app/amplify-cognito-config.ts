@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 
 import { Amplify, type ResourcesConfig } from "aws-amplify";
 import { CookieStorage } from 'aws-amplify/utils';
