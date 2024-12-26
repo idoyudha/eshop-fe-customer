@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import ConfigureAmplifyClientSide from "./amplify-cognito-config";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,6 +17,7 @@ export default function RootLayout({
     <html lang="en" className="h-full antialiased">
       <body className="flex min-h-full flex-col">
         <div className="flex min-h-full flex-1 flex-col bg-white" vaul-drawer-wrapper="">
+          <ConfigureAmplifyClientSide />
           {children}
         </div>
         <Toaster position="top-center" offset={10} />

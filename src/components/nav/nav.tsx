@@ -6,6 +6,7 @@ import { CartSummaryNav } from "./cart-summary-nav";
 import DropdownUser from "./dropdown-user";
 import { NavMenu } from "./nav-menu";
 import { SearchNav } from "./search-nav";
+import { buttonVariants } from "../ui/button";
 
 export const Nav = async () => {
 	const user = useAuthUser();
@@ -24,7 +25,14 @@ export const Nav = async () => {
 				</div>
 				
 				{!user ? (
-					<></>
+					<EshopLink
+						className={buttonVariants({
+						size: "sm",
+					})}
+						href="/auth/login"
+					>
+						Login
+                  </EshopLink>
 				) : (
 					<div>
 						<CartSummaryNav />

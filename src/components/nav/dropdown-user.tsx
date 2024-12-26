@@ -21,7 +21,7 @@ export default function DropdownUser() {
                 <DropdownMenuItem>
                     <Link
                         className="sm"
-                        href="/dashboard/settings"
+                        href="/account/settings"
                     >
                         <Settings className="mr-2 h-4 w-4"/>
                         <span>Settings</span>
