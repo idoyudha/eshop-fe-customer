@@ -46,11 +46,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 setUser(currentUser);
                 setIsAuthenticated(true);
                 toast.success('Successfully logged in!');
-                router.push('/eshop');
+                router.push('/');
             }
         } catch (error) {
             console.error('Login error:', error);
-            toast.error('Login failed. Please check your credentials.');
+            toast.error('Login failed. Please check your credentials and try again.');
             throw error;
         }
     };
@@ -74,4 +74,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     )
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): AuthContextType => useContext(AuthContext);

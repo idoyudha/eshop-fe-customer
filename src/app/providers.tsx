@@ -1,3 +1,6 @@
+"use client"
+
+import { AuthProvider } from '@/context/auth-context';
 import { Amplify } from 'aws-amplify';
 
 Amplify.configure({
@@ -18,3 +21,7 @@ Amplify.configure({
         }
     }
 })
+
+export function Providers({ children }: { children: React.ReactNode }) {
+    return <AuthProvider>{children}</AuthProvider>
+}
