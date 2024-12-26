@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getCurrentUser, signOut, signIn, AuthUser } from 'aws-amplify/auth';
+import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession } from 'aws-amplify/auth';
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -24,15 +24,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         checkAuth();
     }, []);
+    
+    useEffect(() => {
+        const attachAuthHeader = async () => {
+            try {
+                const session = await fetchAuthSession();
+                console.log('session:', session);
+                if (session?.tokens?.accessToken) {
+                    const token = session.tokens.accessToken.toString();
+                    window.localStorage.setItem('authToken', token);
+                }
+            } catch (error) {
+                console.error('Error fetching auth session:', error);
+                window.localStorage.removeItem('authToken');
+            }
+        };
+    
+        if (isAuthenticated) {
+            attachAuthHeader();
+        } else {
+            window.localStorage.removeItem('authToken');
+        }
+    }, [isAuthenticated]);
 
     const checkAuth = async () => {
         try {
             const currentUser = await getCurrentUser();
             setUser(currentUser);
             setIsAuthenticated(true);
+            const session = await fetchAuthSession();
+            if (session?.tokens?.accessToken) {
+                window.localStorage.setItem('authToken', session.tokens.accessToken.toString());
+            }
         } catch (error) {
             setUser(null);
             setIsAuthenticated(false);
+            window.localStorage.removeItem('authToken');
         } finally {
             setLoading(false);
         }
@@ -60,13 +87,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             await signOut();
             setUser(null);
             setIsAuthenticated(false);
+            window.localStorage.removeItem('authToken');
             router.push('/login');
         } catch (error) {
             console.error('Logout error:', error);
             toast.error('Logout failed. Please try again.');
         }
     };
-
+    
     return (
         <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>
             {children}

@@ -4,11 +4,11 @@ export function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
     const isCartPath = path.match(/\/cart($|\/)/)
     const isOrderPath = path.match(/\/order($|\/)/)
-    
 
-    const token = req.cookies.get('CognitoIdentityServiceProvider')?.value
+    const authHeader = req.headers.get('Authorization');
+    const isAuthenticated = !!authHeader && authHeader.startsWith('Bearer ');
 
-    if ((isCartPath || isOrderPath) && !token) {
+    if ((isCartPath || isOrderPath) && !isAuthenticated) {
         const response = NextResponse.redirect(new URL('/login', req.url))
         return response
     }
