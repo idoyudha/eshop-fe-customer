@@ -23,7 +23,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     const { login } = useAuth()
     const router = useRouter()
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             await login(email, password);
@@ -38,6 +38,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         e.preventDefault();
         try {
             await signInWithRedirect({ provider: 'Google' });
+            router.push('/');
         } catch (error) {
             console.error('Google login error:', error);
             toast.error('Google login failed. Please try again.');
@@ -54,7 +55,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleLogin}>
                         <div className="flex flex-col gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email</Label>

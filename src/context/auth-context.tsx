@@ -3,14 +3,16 @@
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession } from 'aws-amplify/auth';
+import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp } from 'aws-amplify/auth';
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    user: any | null;
+    user: AuthUser | null;
+    loading: boolean;
     login: (username: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
-    loading: boolean;
+    signup: (email: string, name: string, password: string) => Promise<void>;
+    confirmSignupCode: (email: string, code: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -79,14 +81,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             throw error;
         }
     };
+
+    const signup = async (email: string, name: string, password: string) => {
+        try {
+            const { isSignUpComplete } = await signUp({
+                username: name,
+                password,
+                options: {
+                    userAttributes: {
+                        email, 
+                    },
+                    autoSignIn: { 
+                        enabled: true
+                    }
+                }
+            });
+
+            if (isSignUpComplete) {
+                toast.success('Sign up successful! Please check your email for verification code.');
+                router.push('/verify-email');
+            }
+        } catch (error) {
+            console.error('Signup error:', error);
+            toast.error('Sign up failed. Please try again.');
+            throw error;
+        }
+    };
+
+    const confirmSignupCode = async (email: string, code: string) => {
+        try {
+            const { isSignUpComplete } = await confirmSignUp({
+                username: email,
+                confirmationCode: code
+            });
+
+            if (isSignUpComplete) {
+                toast.success('Email verified successfully! You can now login.');
+                router.push('/login');
+            }
+        } catch (error) {
+            console.error('Confirmation error:', error);
+            toast.error('Verification failed. Please check the code and try again.');
+            throw error;
+        }
+    };
     
     const logout = async () => {
         try {
             await signOut();
             setUser(null);
             setIsAuthenticated(false);
-            // window.localStorage.removeItem('authToken');
-            router.push('/login');
+            router.push('/');
         } catch (error) {
             console.error('Logout error:', error);
             toast.error('Logout failed. Please try again.');
@@ -94,7 +139,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
     
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, login, logout, loading }}>
+        <AuthContext.Provider value={{ 
+            isAuthenticated, 
+            user, 
+            login, 
+            logout, 
+            signup,
+            confirmSignupCode,
+            loading 
+        }}>
             {children}
         </AuthContext.Provider>
     )
