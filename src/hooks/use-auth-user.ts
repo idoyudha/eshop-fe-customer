@@ -3,7 +3,7 @@
 import { getCurrentUser, fetchAuthSession, fetchUserAttributes } from "aws-amplify/auth";
 import { useEffect, useState } from "react";
 
-const useAuthUser = () => {
+export function useAuthUser() {
     const [user, setUser] = useState<Record<string, any> | null>(null);
 
     useEffect(() => {
@@ -26,5 +26,3 @@ const useAuthUser = () => {
     
     return user;
 };
-
-export default useAuthUser;

@@ -1,4 +1,6 @@
-import useAuthUser from "@/hooks/use-auth-user";
+"use client"
+
+import { useAuthUser } from "@/hooks/use-auth-user";
 import { EshopLink } from "../eshop-link";
 import { CartSummaryNav } from "./cart-summary-nav";
 import DropdownUser from "./dropdown-user";
