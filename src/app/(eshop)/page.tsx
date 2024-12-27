@@ -25,10 +25,9 @@ export default async function Home() {
 						</EshopLink>
 					</div>
 					<Image
-						alt="Cup of Coffee"
+						alt="Mazda CX 5"
 						loading="eager"
 						priority={true}
-						className="rounded"
 						height={450}
 						width={450}
 						src={CarImage}

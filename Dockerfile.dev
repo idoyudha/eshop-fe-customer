@@ -1,0 +1,18 @@
+# Base stage for development
+FROM node:20.13.1 AS base
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Development stage
+FROM base AS dev
+ENV NODE_ENV=development
+ENV WATCHPACK_POLLING=true 
+
+# Copy package files and env files first
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of the application
+COPY . .
+
+CMD ["npm", "run", "dev"]

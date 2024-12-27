@@ -5,7 +5,7 @@ import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Eshop Ecommerce",
-  description: "Shopping your future car and motorcycle",
+  description: "Shopping your future car and motorcycle!",
 };
 
 export default function RootLayout({
