@@ -3,6 +3,8 @@ import Image from "next/image";
 import EshopConfig from "@/eshop.config";
 import { CategoryBox } from "@/components/category-box";
 import CarImage from "@/images/rav4.jpg";
+import { getAllProductsAction } from "@/actions/product-actions";
+import { ProductList } from "@/components/products/product-list";
 
 export const metadata = {
     title: "Eshop Ecommerce",
@@ -10,6 +12,10 @@ export const metadata = {
 };
 
 export default async function Home() {
+	const products = await getAllProductsAction();
+	if (products === null) {
+		return null;
+	}
     return (
         <main>
             <section className="rounded bg-neutral-100 py-8 sm:py-12">
@@ -39,7 +45,7 @@ export default async function Home() {
 				</div>
 			</section>
 
-			{/* <ProductList products={products} /> */}
+			<ProductList products={products} />
 
 			<section className="w-full py-8">
 				<div className="grid gap-8 lg:grid-cols-2">
