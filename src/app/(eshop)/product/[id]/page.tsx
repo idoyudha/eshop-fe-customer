@@ -14,8 +14,8 @@ export default async function ProductPage(props: {
     if (!product) {
         return notFound();
     }
-    const categoryData = await getCategoryByID(product.category_id);
-    const category = categoryData?.name
+    const category = await getCategoryByID(product.category_id);
+    // const category = categoryData?.name
     const image = product.image_url;
 
     return (
@@ -32,7 +32,8 @@ export default async function ProductPage(props: {
 							<BreadcrumbSeparator />
 							<BreadcrumbItem>
 								<BreadcrumbLink className="inline-flex min-h-12 min-w-12 items-center justify-center" asChild>
-									<EshopLink href={`/category/${category}`}>{deslugify(category)}</EshopLink>
+                                    {/* TODO: bugs if we click the breadcrumb, the page not exist */}
+									<EshopLink href={`/category/${category.id}`}>{deslugify(category.name)}</EshopLink>
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 						</>

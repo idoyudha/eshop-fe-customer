@@ -6,25 +6,17 @@ import { EshopLink } from "../eshop-link";
 const sections = [
 	{
 		header: "Products",
-		links: StoreConfig.categories.map(({ name, slug }) => ({
+		links: StoreConfig.categories.map(({ name, category_id }) => ({
 			label: name,
-			href: `/category/${slug}`,
+			href: `/category/${category_id}`,
 		})),
 	},
 	{
 		header: "Support",
 		links: [
 			{
-				label: "Features",
-				href: "https://yournextstore.com/#features",
-			},
-			{
-				label: "Pricing",
-				href: "https://yournextstore.com/#pricing",
-			},
-			{
 				label: "Contact Us",
-				href: "mailto:hi@yournextstore.com",
+				href: "mailto:hi@eshop.com",
 			},
 		],
 	},
@@ -49,10 +41,10 @@ export async function Footer() {
 						{section.links.map((link) => (
 						<li key={link.label}>
 							<EshopLink 
-							className="underline-offset-4 hover:underline" 
-							href={link.href}
+								className="underline-offset-4 hover:underline" 
+								href={link.href}
 							>
-							{link.label}
+								{link.label}
 							</EshopLink>
 						</li>
 						))}
@@ -65,19 +57,19 @@ export async function Footer() {
 				<div className="flex flex-col items-center justify-between gap-4 border-t border-neutral-200 pt-8 text-sm text-neutral-500 md:flex-row">
 				<div>
 					<p>© 2025 Eshop</p>
-					<p>Car ecommerce</p>
+					<p>Car and Motor Ecommerce</p>
 				</div>
 				<div className="flex items-center gap-4">
 					<EshopLink
-					className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
-					href="https://x.com/zaiste"
+						className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
+						href="https://x.com/eshop"
 					>
 					<TwitterIcon className="h-4 w-4" /> @eshop
 					<span className="sr-only">Twitter</span>
 					</EshopLink>
 					<EshopLink
-					className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
-					href="https://x.com/typeofweb"
+						className="inline-flex items-center gap-1 transition-colors hover:text-neutral-700"
+						href="https://x.com/eshop"
 					>
 					<TwitterIcon className="h-4 w-4" /> @eshop
 					<span className="sr-only">Twitter</span>

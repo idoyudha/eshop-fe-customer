@@ -6,9 +6,9 @@ const links = [
 		label: "Home",
 		href: "/",
 	},
-	...StoreConfig.categories.map(({ name, slug }) => ({
+	...StoreConfig.categories.map(({ name, category_id }) => ({
 		label: name,
-		href: `/category/${slug}`,
+		href: `/category/${category_id}`,
 	})),
 ];
 
