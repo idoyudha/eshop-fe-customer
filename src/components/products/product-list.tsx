@@ -13,7 +13,7 @@ export const ProductList = async ({ products }: { products: Product[] }) => {
 							<EshopLink href={`/product/${product.id}`}>
 								<article className="overflow-hidden bg-white">
 									{product.image_url && (
-										<div className="rounded-lg aspect-square w-full overflow-hidden bg-neutral-100">
+										<div className="rounded-lg aspect-[3/2] w-full overflow-hidden bg-neutral-100">
 											<Image
 												className="group-hover:rotate hover-perspective w-full bg-neutral-100 object-cover object-center transition-opacity group-hover:opacity-75"
 												src={product.image_url}

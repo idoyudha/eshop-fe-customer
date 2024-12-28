@@ -1,4 +1,4 @@
-import { getProductAction } from "@/actions/product-actions";
+import { getCategoryByID, getProductAction } from "@/actions/product-actions";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { EshopLink } from "@/components/eshop-link";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
@@ -16,9 +16,10 @@ export default async function ProductPage(props: {
     if (!product) {
         return notFound();
     }
+    const categoryData = await getCategoryByID(product.category_id);
     const selectedVariant = searchParams.variant;
-    const category = product.category.name;
-    const image = product.imageUrl;
+    const category = categoryData?.name
+    const image = product.image_url;
 
     return (
         <article className="pb-12">
