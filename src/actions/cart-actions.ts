@@ -1,5 +1,15 @@
+import { useAuth } from "@/context/auth-context";
 import { Cart } from "@/models/cart";
-import { revalidateTag } from "next/cache";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
+
+const cartService = process.env.NEXT_PUBLIC_CART_SERVICE;
+
+interface CartsResponse {
+	code: number;
+	data: Cart[];
+	message: string;
+}
 
 export async function getCartAction(): Promise<Cart[] | null> {
 	const cart = null; // TODO: Fetch cart from the API
@@ -8,23 +18,51 @@ export async function getCartAction(): Promise<Cart[] | null> {
 	}
 	return cart;
 }
-export async function addToCartAction(formData: FormData) {
-	const productId = formData.get("productId");
-	if (!productId || typeof productId !== "string") {
-		throw new Error("Invalid product ID");
-	}
 
-	const cart = await getCartAction();
+interface CartResponse {
+	code: number;
+	data: Cart;
+	message: string;
+}
 
-	const updatedCart = null;
-	if (updatedCart) {
-        // TODO: Update cart in the API
-		// await setCartCookieJson({
-		// 	id: updatedCart.id,
-		// 	linesCount: Commerce.cartCount(updatedCart.metadata),
-		// });
-		return structuredClone(updatedCart);
-	}
+export interface createCartRequest {
+	product_id: string
+	product_name: string
+	product_price: number
+	product_quantity: number
+	note: string
+}
+
+export async function addToCartAction(data: createCartRequest, router: AppRouterInstance, accessToken: string): Promise<Cart | null> {
+	try {
+		const response = await fetch(`${cartService}/v1/carts`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken}`,
+            },
+			body: JSON.stringify(data),
+        });
+
+		if (response.status === 401) {
+            router.push(`/auth/login`);
+            return null;
+		}
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const cart: CartResponse = await response.json();
+        if (cart && cart.data) {
+            return structuredClone(cart.data);
+        }
+
+        return null;
+	} catch (error) {
+        console.error('Error create cart:', error);
+        return null;
+    }
 }
 
 export async function increaseQuantity(productId: string) {

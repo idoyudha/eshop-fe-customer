@@ -13,6 +13,7 @@ interface AuthContextType {
     logout: () => Promise<void>;
     signup: (email: string, name: string, password: string) => Promise<void>;
     confirmSignupCode: (email: string, code: string) => Promise<void>;
+    getAccessToken: () => Promise<string | null>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -52,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const currentUser = await getCurrentUser();
             setUser(currentUser);
             setIsAuthenticated(true);
-            const session = await fetchAuthSession();
+            // const session = await fetchAuthSession();
             // if (session?.tokens?.accessToken) {
             //     window.localStorage.setItem('authToken', session.tokens.accessToken.toString());
             // }
@@ -64,6 +65,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setLoading(false);
         }
     };
+
+    const getAccessToken = async () => {
+        try {
+            const session = await fetchAuthSession();
+            return session.tokens?.accessToken.toString() || null;
+        } catch (error) {
+            console.error('Error getting access token:', error);
+            return null;
+        }
+    };  
 
     const login = async (username: string, password: string) => {
         try {
@@ -146,7 +157,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             logout, 
             signup,
             confirmSignupCode,
-            loading 
+            loading,
+            getAccessToken
         }}>
             {children}
         </AuthContext.Provider>
