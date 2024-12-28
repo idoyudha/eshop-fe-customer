@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 
 export function SignupForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
     const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
     const [name, setName] = useState("")
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -31,9 +32,8 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
             return;
         }
         try {
-            await signup(email, name, password);
-            toast.success('Successfully signed up!');
-            router.push('/');
+            await signup(email, username, name, password);
+            toast.success('Successfully signed up, please check your email for verification code');
         } catch (error) {
             toast.error('Signup failed. Please check your credentials and try again.');
         }
@@ -58,18 +58,29 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
                                     type="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="m@example.com"
+                                    placeholder="m@eshop.com"
                                     required
                                 />
                             </div>
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Username</Label>
+                                <Label htmlFor="username">Username</Label>
+                                <Input
+                                    id="username"
+                                    type="username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder="jumpscare789"
+                                    required
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="name">Name</Label>
                                 <Input
                                     id="name"
                                     type="name"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    placeholder="Papa"
+                                    placeholder="papa123"
                                     required
                                 />
                             </div>

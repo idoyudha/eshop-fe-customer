@@ -28,7 +28,6 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         try {
             await login(email, password);
             toast.success('Successfully logged in!');
-            router.push('/');
         } catch (error) {
             toast.error('Login failed. Please check your credentials and try again.');
         }

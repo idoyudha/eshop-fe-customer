@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp } from 'aws-amplify/auth';
+import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -11,8 +11,9 @@ interface AuthContextType {
     loading: boolean;
     login: (username: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
-    signup: (email: string, name: string, password: string) => Promise<void>;
+    signup: (email: string, username: string, name: string, password: string) => Promise<void>;
     confirmSignupCode: (email: string, code: string) => Promise<void>;
+    resendVerificationCode: (username: string) => Promise<void>;
     getAccessToken: () => Promise<string | null>;
 }
 
@@ -83,24 +84,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 const currentUser = await getCurrentUser();
                 setUser(currentUser);
                 setIsAuthenticated(true);
-                toast.success('Successfully logged in!');
                 router.push('/');
             }
         } catch (error) {
             console.error('Login error:', error);
-            toast.error('Login failed. Please check your credentials and try again.');
             throw error;
         }
     };
 
-    const signup = async (email: string, name: string, password: string) => {
+    const signup = async (email: string, username: string, name: string, password: string) => {
         try {
             const { isSignUpComplete } = await signUp({
-                username: name,
+                username: username,
                 password,
                 options: {
                     userAttributes: {
                         email, 
+                        name
                     },
                     autoSignIn: { 
                         enabled: true
@@ -109,12 +109,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             });
 
             if (isSignUpComplete) {
-                toast.success('Sign up successful! Please check your email for verification code.');
-                router.push('/verify-email');
+                router.push('/auth/verify');
             }
         } catch (error) {
             console.error('Signup error:', error);
-            toast.error('Sign up failed. Please try again.');
             throw error;
         }
     };
@@ -127,12 +125,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             });
 
             if (isSignUpComplete) {
-                toast.success('Email verified successfully! You can now login.');
-                router.push('/login');
+                router.push('/');
             }
         } catch (error) {
             console.error('Confirmation error:', error);
-            toast.error('Verification failed. Please check the code and try again.');
+            throw error;
+        }
+    };
+
+    const resendVerificationCode = async (username: string) => {
+        try {
+            await resendSignUpCode({ username });
+        } catch (error) {
+            console.error('Resend confirmation code error:', error);
             throw error;
         }
     };
@@ -145,7 +150,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             router.push('/');
         } catch (error) {
             console.error('Logout error:', error);
-            toast.error('Logout failed. Please try again.');
         }
     };
     
@@ -157,6 +161,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             logout, 
             signup,
             confirmSignupCode,
+            resendVerificationCode,
             loading,
             getAccessToken
         }}>
