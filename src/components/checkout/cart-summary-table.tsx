@@ -66,7 +66,7 @@ export const CartSummaryTable = ({carts}: {carts: Cart[]}) => {
                                     <TableCell>
                                         {formatMoney({
                                             price: totalPrice,
-                                            currency: "IDR",
+                                            currency: "USD",
                                         })}
                                     </TableCell>
                                     <TableCell>

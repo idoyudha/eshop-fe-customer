@@ -51,7 +51,7 @@ export async function CartModalPage() {
 								<p className="text-sm font-medium leading-none">
                                     {formatMoney({
                                         price: totalPrice,
-                                        currency: "IDR",
+                                        currency: "USD",
                                     })}
 								</p>
 								<p className="self-end text-sm font-medium text-muted-foreground">
@@ -72,7 +72,7 @@ export async function CartModalPage() {
 					<p>
                         {formatMoney({
 							price: totalPrice,
-							currency: "IDR",
+							currency: "USD",
 						})}
 					</p>
 				</div>

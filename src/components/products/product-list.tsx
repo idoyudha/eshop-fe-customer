@@ -33,7 +33,7 @@ export const ProductList = async ({ products }: { products: Product[] }) => {
 												<p>
 													{formatMoney({
 														price: product.price,
-														currency: "IDR",
+														currency: "USD",
 													})}
 												</p>
 											)}

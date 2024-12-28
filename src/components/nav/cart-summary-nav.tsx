@@ -46,7 +46,7 @@ const CartSummaryNavInner = async () => {
 								{"Total"}:{" "}
 								{formatMoney({
 									price: totalPrice,
-									currency: "IDR",
+									currency: "USD",
 								})}
 							</span>
 						</CartLink>
@@ -55,7 +55,7 @@ const CartSummaryNavInner = async () => {
 				<TooltipContent side="left" sideOffset={25}>
 					<p>Total Items { totalItems }</p>
 					<p>
-						{"Total"}: {formatMoney({ price: totalPrice, currency: "IDR" })}
+						{"Total"}: {formatMoney({ price: totalPrice, currency: "USD" })}
 					</p>
 				</TooltipContent>
 			</Tooltip>

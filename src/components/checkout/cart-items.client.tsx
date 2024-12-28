@@ -119,7 +119,7 @@ export const CartItemLineTotal = ({
 		>
 			{formatMoney({
                 price: unitAmount * quantity,
-                currency: "IDR",
+                currency: "USD",
             })}
 		</span>
 	);
@@ -140,7 +140,7 @@ export const CartAmountWithSpinner = ({ total }: { total: number;  }) => {
 			)}
 			{formatMoney({
                 price: total,
-                currency: "IDR",
+                currency: "USD",
             })}
 		</span>
 	);

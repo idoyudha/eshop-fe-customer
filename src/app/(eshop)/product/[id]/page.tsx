@@ -50,7 +50,7 @@ export default async function ProductPage(props: {
 						<p className="mt-2 text-2xl font-medium leading-none tracking-tight text-foreground/70">
 							{formatMoney({
                                 price: product.price,
-                                currency: "IDR",
+                                currency: "USD",
                             })}
 						</p>
 					)}
