@@ -3,8 +3,8 @@ import MotorImage from "@/images/xsr155.jpg";
 
 export const config = {
 	categories: [
-		{ name: "Car", slug: "car", image: CarImage },
-		{ name: "Motor", slug: "motor", image: MotorImage },
+		{ name: "Car", slug: "car", category_id: "0193ec82-749f-7ad6-b194-65eaf0de698f", image: CarImage },
+		{ name: "Motor", slug: "motor", category_id: "0193ec82-892a-7ebd-89e9-5500bfb5a634", image: MotorImage },
 	],
 
 	social: {

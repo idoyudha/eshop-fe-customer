@@ -4,13 +4,15 @@ import { deslugify } from "@/lib/utils";
 
 export async function CategoryBox({
 	categorySlug,
+	categoryId,
 	src,
 }: {
 	categorySlug: string;
+	categoryId: string;
 	src: ImageProps["src"];
 }) {
     return (
-        <EshopLink href={`/category/${categorySlug}`} className="group relative">
+        <EshopLink href={`/category/${categoryId}`} className="group relative">
             <div className="relative overflow-hidden rounded-lg">
 				<Image
 					alt="Cover image"

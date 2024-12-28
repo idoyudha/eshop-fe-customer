@@ -8,16 +8,13 @@ import { notFound } from "next/navigation";
 
 export default async function ProductPage(props: {
 	params: Promise<{ id: string }>;
-	searchParams: Promise<{ variant?: string; image?: string }>;
 }) {
     const params = await props.params;
-    const searchParams = await props.searchParams;
     const product = await getProductAction(params.id);
     if (!product) {
         return notFound();
     }
     const categoryData = await getCategoryByID(product.category_id);
-    const selectedVariant = searchParams.variant;
     const category = categoryData?.name
     const image = product.image_url;
 
@@ -44,14 +41,6 @@ export default async function ProductPage(props: {
 					<BreadcrumbItem>
 						<BreadcrumbPage>{product.name}</BreadcrumbPage>
 					</BreadcrumbItem>
-                    {selectedVariant && (
-						<>
-							<BreadcrumbSeparator />
-							<BreadcrumbItem>
-								<BreadcrumbPage>{deslugify(selectedVariant)}</BreadcrumbPage>
-							</BreadcrumbItem>
-						</>
-					)}
                 </BreadcrumbList>
             </Breadcrumb>
             <div className="mt-4 grid gap-4 lg:grid-cols-12">
