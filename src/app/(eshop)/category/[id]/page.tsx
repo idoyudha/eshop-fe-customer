@@ -8,7 +8,10 @@ export default async function CategoryPage(props: {
 }) {
     const params = await props.params;
     const parentCategory = await getCategoryByID(params.id);
-    const childCategories = await getCategoriesByParentID(params.id);
+    var childCategories = await getCategoriesByParentID(params.id);
+    if (childCategories == null && parentCategory != null) {
+        childCategories = [parentCategory];
+    }
     const products = await getProductsByCategoryIDsAction(childCategories?.map((category) => category.id) || []);
     if (!products) {
         return notFound();
