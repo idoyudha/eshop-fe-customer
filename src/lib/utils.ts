@@ -12,6 +12,16 @@ export function invariant(condition: unknown, message: string): asserts conditio
 	}
 }
 
+export function getBaseUrl(serviceName: string) {
+	if (typeof window === 'undefined') {
+		// server-side
+        return process.env[serviceName] || '';
+	}
+	// client-side
+	const nextPublicName = `NEXT_PUBLIC_${serviceName}`;
+    return process.env[nextPublicName] || '';
+}
+
 type Money = { price: number; currency: string };
 
 export const formatMoney = ({ price, currency }: Money & { locale?: string }) => {
@@ -50,3 +60,4 @@ export const calculateCartTotalPrice = (cart : Cart[]) => {
 export const calculateCartTotalItems = (cart : Cart[]) => {
 	return cart.reduce((acc, item) => acc + item.product_quantity, 0);
 }
+

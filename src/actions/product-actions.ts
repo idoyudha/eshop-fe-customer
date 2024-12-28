@@ -1,7 +1,8 @@
+import { getBaseUrl } from "@/lib/utils";
 import { Category } from "@/models/category";
 import { Product } from "@/models/product";
 
-const productService = process.env.NEXT_PUBLIC_PRODUCT_SERVICE;
+const productService = 'PRODUCT_SERVICE';
 
 interface ProductDetailResponse {
     code: number;
@@ -11,7 +12,8 @@ interface ProductDetailResponse {
 
 export async function getProductAction(id: string): Promise<Product | null> {
     try {
-        const response = await fetch(`${productService}/v1/products/${id}`, {
+        const productServiceBaseUrl = getBaseUrl(productService)
+        const response = await fetch(`${productServiceBaseUrl}/v1/products/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,7 +44,9 @@ interface ProductAllResponse {
 
 export async function getAllProductsAction(): Promise<Product[] | null> {
     try {
-        const response = await fetch(`${productService}/v1/products/`, {
+        console.log('Running in:', typeof window === 'undefined' ? 'server' : 'client');
+        const productServiceBaseUrl = getBaseUrl(productService)
+        const response = await fetch(`${productServiceBaseUrl}/v1/products/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,7 +71,8 @@ export async function getAllProductsAction(): Promise<Product[] | null> {
 
 export async function getProductsByCategoryIDsAction(ids: string[]): Promise<Product[] | null> {
     try {
-        const response = await fetch(`${productService}/v1/products/categories`, {
+        const productServiceBaseUrl = getBaseUrl(productService)
+        const response = await fetch(`${productServiceBaseUrl}/v1/products/categories`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -101,7 +106,8 @@ interface CategoryResponse {
 
 export async function getCategoryByID(id: string): Promise<Category | null> {
     try {
-        const response = await fetch(`${productService}/v1/categories/${id}`, {
+        const productServiceBaseUrl = getBaseUrl(productService)
+        const response = await fetch(`${productServiceBaseUrl}/v1/categories/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -132,7 +138,8 @@ interface CategoriesResponse {
 
 export async function getCategoriesByParentID(id: string): Promise<Category[] | null> {
     try {
-        const response = await fetch(`${productService}/v1/categories/parent/${id}`, {
+        const productServiceBaseUrl = getBaseUrl(productService)
+        const response = await fetch(`${productServiceBaseUrl}/v1/categories/parent/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

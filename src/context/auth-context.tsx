@@ -33,7 +33,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const attachAuthHeader = async () => {
             try {
                 const session = await fetchAuthSession();
-                console.log('session:', session);
                 if (session?.tokens?.accessToken) {
                     const token = session.tokens.accessToken.toString();
                     // window.localStorage.setItem('authToken', token);

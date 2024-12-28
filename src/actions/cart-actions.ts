@@ -1,9 +1,8 @@
-import { useAuth } from "@/context/auth-context";
+import { getBaseUrl } from "@/lib/utils";
 import { Cart } from "@/models/cart";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-
-const cartService = process.env.NEXT_PUBLIC_CART_SERVICE;
+const cartService = 'CART_SERVICE';
 
 interface CartsResponse {
 	code: number;
@@ -35,7 +34,11 @@ export interface createCartRequest {
 
 export async function addToCartAction(data: createCartRequest, router: AppRouterInstance, accessToken: string): Promise<Cart | null> {
 	try {
-		const response = await fetch(`${cartService}/v1/carts`, {
+		var cartServiceBaseUrl = getBaseUrl(cartService)
+		if (!cartServiceBaseUrl) {
+			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+		}
+		const response = await fetch(`${cartServiceBaseUrl}/v1/carts`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -63,44 +66,4 @@ export async function addToCartAction(data: createCartRequest, router: AppRouter
         console.error('Error create cart:', error);
         return null;
     }
-}
-
-export async function increaseQuantity(productId: string) {
-	const cart = await getCartAction();
-	if (!cart) {
-		throw new Error("Cart not found");
-	}
-	// await Commerce.cartChangeQuantity({
-	// 	productId,
-	// 	cartId: cart.cart.id,
-	// 	operation: "INCREASE",
-	// });
-}
-
-export async function decreaseQuantity(productId: string) {
-	const cart = await getCartAction();
-	if (!cart) {
-		throw new Error("Cart not found");
-	}
-	// await Commerce.cartChangeQuantity({
-	// 	productId,
-	// 	cartId: cart.cart.id,
-	// 	operation: "DECREASE",
-	// });
-}
-
-export async function setQuantity({
-	productId,
-	cartId,
-	quantity,
-}: {
-	productId: string;
-	cartId: string;
-	quantity: number;
-}) {
-	const cart = await getCartAction();
-	if (!cart) {
-		throw new Error("Cart not found");
-	}
-	// await Commerce.cartSetQuantity({ productId, cartId, quantity });
 }
