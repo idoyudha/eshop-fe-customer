@@ -1,6 +1,7 @@
 import { getCategoryByID, getProductAction } from "@/actions/product-actions";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { EshopLink } from "@/components/eshop-link";
+import { ProductActions } from "@/components/products/product-action";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { deslugify, formatMoney } from "@/lib/utils";
 import Image from "next/image";
@@ -15,7 +16,6 @@ export default async function ProductPage(props: {
         return notFound();
     }
     const category = await getCategoryByID(product.category_id);
-    // const category = categoryData?.name
     const image = product.image_url;
 
     return (
@@ -32,7 +32,6 @@ export default async function ProductPage(props: {
 							<BreadcrumbSeparator />
 							<BreadcrumbItem>
 								<BreadcrumbLink className="inline-flex min-h-12 min-w-12 items-center justify-center" asChild>
-                                    {/* TODO: bugs if we click the breadcrumb, the page not exist */}
 									<EshopLink href={`/category/${category.id}`}>{deslugify(category.name)}</EshopLink>
 								</BreadcrumbLink>
 							</BreadcrumbItem>
@@ -84,7 +83,14 @@ export default async function ProductPage(props: {
                             {product.description}
                         </div>
                     </section>
-                    <AddToCartButton productId={product.id} disabled={product.quantity <= 0} />
+                    <ProductActions 
+                        initialProduct={{
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            quantity: product.quantity
+                        }} 
+                    />
                 </div>
             </div>
             
