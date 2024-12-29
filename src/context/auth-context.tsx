@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import { toast } from "sonner";
 import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
 
 interface AuthContextType {
@@ -26,45 +25,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter();
 
     useEffect(() => {
-        checkAuth();
-    }, []);
-    
-    useEffect(() => {
-        const attachAuthHeader = async () => {
+        const checkAuth = async () => {
             try {
+                // check current user
+                const currentUser = await getCurrentUser();
+                setUser(currentUser);
+                setIsAuthenticated(true);
+
+                // explicitly fetch session
                 const session = await fetchAuthSession();
+                console.log("session data:", session);
+                
                 if (session?.tokens?.accessToken) {
-                    const token = session.tokens.accessToken.toString();
-                    // window.localStorage.setItem('authToken', token);
+                    console.log("access token found:", session.tokens.accessToken);
                 }
             } catch (error) {
-                console.error('Error fetching auth session:', error);
-                // window.localStorage.removeItem('authToken');
+                setUser(null);
+                setIsAuthenticated(false);
+            } finally {
+                setLoading(false);
             }
         };
-    
-        if (isAuthenticated) {
-            attachAuthHeader();
-        }
-    }, [isAuthenticated]);
 
-    const checkAuth = async () => {
-        try {
-            const currentUser = await getCurrentUser();
-            setUser(currentUser);
-            setIsAuthenticated(true);
-            // const session = await fetchAuthSession();
-            // if (session?.tokens?.accessToken) {
-            //     window.localStorage.setItem('authToken', session.tokens.accessToken.toString());
-            // }
-        } catch (error) {
-            setUser(null);
-            setIsAuthenticated(false);
-            // window.localStorage.removeItem('authToken');
-        } finally {
-            setLoading(false);
-        }
-    };
+        checkAuth();
+    }, []);
 
     const getAccessToken = async () => {
         try {
@@ -81,12 +65,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const { isSignedIn } = await signIn({ username, password });
             if (isSignedIn) {
                 const currentUser = await getCurrentUser();
+
+                const session = await fetchAuthSession();
+                console.log("login session:", session);
+
                 setUser(currentUser);
                 setIsAuthenticated(true);
                 router.push('/');
             }
         } catch (error) {
-            console.error('Login error:', error);
+            console.error('login error:', error);
             throw error;
         }
     };
@@ -111,7 +99,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 router.push('/auth/verify');
             }
         } catch (error) {
-            console.error('Signup error:', error);
+            console.error('signup error:', error);
             throw error;
         }
     };
@@ -127,7 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 router.push('/');
             }
         } catch (error) {
-            console.error('Confirmation error:', error);
+            console.error('confirmation error:', error);
             throw error;
         }
     };
@@ -136,7 +124,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
             await resendSignUpCode({ username });
         } catch (error) {
-            console.error('Resend confirmation code error:', error);
+            console.error('resend confirmation code error:', error);
             throw error;
         }
     };
@@ -148,7 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setIsAuthenticated(false);
             router.push('/');
         } catch (error) {
-            console.error('Logout error:', error);
+            console.error('logout error:', error);
         }
     };
     
