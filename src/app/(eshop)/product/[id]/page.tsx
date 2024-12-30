@@ -87,6 +87,7 @@ export default async function ProductPage(props: {
                         initialProduct={{
                             id: product.id,
                             name: product.name,
+                            image_url: product.image_url,
                             price: product.price,
                             quantity: product.quantity
                         }} 

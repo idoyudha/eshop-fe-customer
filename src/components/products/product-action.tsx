@@ -9,6 +9,7 @@ interface ProductActionsProps {
     initialProduct: {
         id: string;
         name: string;
+        image_url: string;
         price: number;
         quantity: number;
     };
@@ -20,6 +21,7 @@ export function ProductActions({ initialProduct }: ProductActionsProps) {
     const createCartRequest = {
         product_id: initialProduct.id,
         product_name: initialProduct.name,
+        product_image_url: initialProduct.image_url,
         product_price: initialProduct.price,
         product_quantity: quantity,
         note: "",
