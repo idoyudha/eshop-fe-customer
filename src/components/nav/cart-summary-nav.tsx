@@ -1,9 +1,13 @@
-import { calculateCartTotalItems, calculateCartTotalPrice, formatMoney } from "@/lib/utils";
+"use client"
+
+import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { ShoppingBagIcon } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { CartLink } from "./cart-link";
 import { getCartAction } from "@/actions/cart-actions";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { useAuth } from "@/context/auth-context";
+import { Cart } from "@/models/cart";
 
 const CartFallback = () => (
 	<div className="h-6 w-6 opacity-30">
@@ -20,16 +24,32 @@ export const CartSummaryNav = () => {
 };
 
 const CartSummaryNavInner = async () => {
-	const carts = await getCartAction();
-	if (!carts) {
-		return <CartFallback />;
-	}
+	const { getAccessToken } = useAuth();
+	const [carts, setCarts] = useState<Cart[]>([]);
+		
+	useEffect(() => {
+		const fetchCart = async () => {
+			try {
+				const accessToken = await getAccessToken();
+				if (accessToken) {
+					const cartData = await getCartAction(accessToken);
+					setCarts(cartData || []);
+				}
+			} catch (error) {
+				setCarts([])
+				console.error('Error fetching cart:', error);
+			}
+		};
+
+		fetchCart();
+	}, [getAccessToken]);	
+
 	if (!carts) {
 		return <CartFallback />;
 	}
 
 	const totalPrice = calculateCartTotalPrice(carts);
-	const totalItems = calculateCartTotalItems(carts);
+	const totalItems = carts.reduce((acc, cart) => acc + cart.product_quantity, 0);
 
 	return (
 		<TooltipProvider>
