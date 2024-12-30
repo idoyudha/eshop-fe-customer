@@ -8,6 +8,7 @@ import { getCartAction } from "@/actions/cart-actions";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { useAuth } from "@/context/auth-context";
 import { Cart } from "@/models/cart";
+import { useCart } from "@/hooks/use-cart";
 
 const CartFallback = () => (
 	<div className="h-6 w-6 opacity-30">
@@ -24,25 +25,7 @@ export const CartSummaryNav = () => {
 };
 
 const CartSummaryNavInner = async () => {
-	const { getAccessToken } = useAuth();
-	const [carts, setCarts] = useState<Cart[]>([]);
-		
-	useEffect(() => {
-		const fetchCart = async () => {
-			try {
-				const accessToken = await getAccessToken();
-				if (accessToken) {
-					const cartData = await getCartAction(accessToken);
-					setCarts(cartData || []);
-				}
-			} catch (error) {
-				setCarts([])
-				console.error('Error fetching cart:', error);
-			}
-		};
-
-		fetchCart();
-	}, [getAccessToken]);	
+	const { carts } = useCart();
 
 	if (!carts) {
 		return <CartFallback />;

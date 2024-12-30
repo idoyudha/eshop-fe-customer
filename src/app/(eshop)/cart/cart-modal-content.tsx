@@ -9,31 +9,10 @@ import { EshopLink } from "@/components/eshop-link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CartAsideContainer } from "./cart-aside";
+import { useCart } from "@/hooks/use-cart";
 
 export function CartModalContent() {
-    const { getAccessToken } = useAuth();
-    const [carts, setCarts] = useState<Cart[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    
-    useEffect(() => {
-        const fetchCart = async () => {
-            try {
-                const accessToken = await getAccessToken();
-                if (accessToken) {
-                    const cartData = await getCartAction(accessToken);
-                    setCarts(cartData || []);
-                }
-            } catch (error) {
-                setCarts([])
-                console.error('Error fetching cart:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchCart();
-    }, [getAccessToken]);
-
+    const { carts } = useCart();
     const totalPrice = calculateCartTotalPrice(carts);
 
     return (

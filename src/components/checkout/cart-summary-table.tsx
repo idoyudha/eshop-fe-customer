@@ -1,39 +1,16 @@
 "use client"
 
-import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
-import { Cart } from "@/models/cart";
-import { useEffect, useOptimistic, useState } from "react";
+import { formatMoney } from "@/lib/utils";
+import { useOptimistic } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import Image from "next/image";
 import { EshopLink } from "../eshop-link";
 import { CartItemLineTotal, CartItemQuantity } from "./cart-items.client";
-import { useAuth } from "@/context/auth-context";
-import { getCartAction } from "@/actions/cart-actions";
 import { CartEmpty } from "./cart-empty";
+import { useCart } from "@/hooks/use-cart";
 
 export const CartSummaryTable = () => {
-    const { getAccessToken } = useAuth();
-    const [carts, setCarts] = useState<Cart[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchCart = async () => {
-            try {
-                const accessToken = await getAccessToken();
-                if (accessToken) {
-                    const cartData = await getCartAction(accessToken);
-                    setCarts(cartData || []);
-                }
-            } catch (error) {
-                setCarts([])
-                console.error('Error fetching cart:', error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchCart();
-    }, [getAccessToken]);
+    const { carts, isLoading } = useCart();
 
     const [optimisticCart, dispatchOptimisticCartAction] = useOptimistic(
 		carts,
