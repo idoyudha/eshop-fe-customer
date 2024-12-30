@@ -85,3 +85,65 @@ export async function addToCartAction(data: createCartRequest, accessToken: stri
         return null;
     }
 }
+
+export interface updateCartRequest {
+    cart_id: string
+	product_quantity: number
+	note: string
+}
+
+export async function updateCartAction(data: updateCartRequest, accessToken: string): Promise<Cart | null> {
+    try {
+		var cartServiceBaseUrl = getBaseUrl(cartService)
+		if (!cartServiceBaseUrl) {
+			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+		}
+		const response = await fetch(`${cartServiceBaseUrl}/v1/carts/${data.cart_id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken}`,
+            },
+			body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const cart: CartResponse = await response.json();
+        if (cart && cart.data) {
+            return structuredClone(cart.data);
+        }
+
+        return null;
+	} catch (error) {
+        console.error('Error update cart:', error);
+        return null;
+    }
+}
+
+export async function deleteCartAction(id: string, accessToken: string): Promise<null> {
+    try {
+        var cartServiceBaseUrl = getBaseUrl(cartService)
+        if (!cartServiceBaseUrl) {
+            cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+        }
+        const response = await fetch(`${cartServiceBaseUrl}/v1/carts/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return null;
+    } catch (error) {
+        console.error('Error delete cart:', error);
+        return null;
+    }
+}

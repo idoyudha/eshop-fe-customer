@@ -1,4 +1,4 @@
-import { setQuantity } from "@/actions/cart-actions";
+import { deleteCartAction, updateCartAction } from "@/actions/cart-actions";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useRef } from "react";
@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 import { formatMoney } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 
 export const CartItemQuantity = ({
     quantity,
@@ -29,6 +30,7 @@ export const CartItemQuantity = ({
 
     const isPending = pending && stateRef.current !== null;
 	const router = useRouter();
+	const { getAccessToken } = useAuth();
 
     const formAction = async (action: "INCREASE" | "DECREASE") => {
 		onChange({ productId, action });
@@ -36,7 +38,15 @@ export const CartItemQuantity = ({
 		const doWork = async () => {
 			try {
 				const modifier = action === "INCREASE" ? 1 : -1;
-				await setQuantity({ cartId, productId, quantity: quantity + modifier });
+				const accessToken = await getAccessToken();
+				if (!accessToken) {
+					return;
+				}
+				if ((quantity + modifier) === 0) {
+					await deleteCartAction(cartId, accessToken);
+				} else {
+					await updateCartAction({ cart_id: cartId, product_quantity: quantity + modifier, note: "" }, accessToken);
+				}
 				router.refresh();
 				stateRef.current?.promise.resolve();
 			} catch (error) {
