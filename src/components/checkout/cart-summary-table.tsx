@@ -60,7 +60,7 @@ export const CartSummaryTable = () => {
         return <CartEmpty />;
     }
 
-    const totalPrice = calculateCartTotalPrice(optimisticCart);
+    // const totalPrice = calculateCartTotalPrice(optimisticCart);
 
     return (
         <form>
@@ -80,10 +80,10 @@ export const CartSummaryTable = () => {
                     {optimisticCart.map((cart) => (
                         <TableRow key={cart.id}>
                             <TableCell className="hidden sm:table-cell sm:w-24">
-                                {cart.product_image && (
+                                {cart.product_image_url && (
                                     <Image
                                         className="aspect-square rounded-md object-cover"
-                                        src={cart.product_image}
+                                        src={cart.product_image_url}
                                         width={96}
                                         height={96}
                                         alt={cart.product_name || ""}

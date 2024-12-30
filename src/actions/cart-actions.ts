@@ -17,7 +17,7 @@ export async function getCartAction(accessToken: string): Promise<Cart[]> {
 			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
 		}
 
-		const response = await fetch(`${cartServiceBaseUrl}/v1/carts`, {
+		const response = await fetch(`${cartServiceBaseUrl}/v1/carts/user`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

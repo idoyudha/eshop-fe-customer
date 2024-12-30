@@ -1,18 +1,40 @@
+"use client"
+
 import { getCartAction } from "@/actions/cart-actions";
 import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { CartAsideContainer } from "./cart-aside";
 import { EshopLink } from "@/components/eshop-link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useAuth } from "@/context/auth-context";
+import { useEffect, useState } from "react";
+import { Cart } from "@/models/cart";
 
 export async function CartModalPage() {
-    const carts = await getCartAction();
+    const { getAccessToken } = useAuth();
+	const [carts, setCarts] = useState<Cart[]>([]);
+	const [isLoading, setIsLoading] = useState(true);
+	
+	useEffect(() => {
+		const fetchCart = async () => {
+			try {
+				const accessToken = await getAccessToken();
+				if (accessToken) {
+					const cartData = await getCartAction(accessToken);
+					setCarts(cartData || []);
+				}
+			} catch (error) {
+				setCarts([])
+				console.error('Error fetching cart:', error);
+			} finally {
+				setIsLoading(false);
+			}
+		};
 
-    if (!carts) {
-        return null;
-    }
+		fetchCart();
+	}, [getAccessToken]);
 
-    const totalPrice = calculateCartTotalPrice(carts);
+	const totalPrice = calculateCartTotalPrice(carts);
 
     return (
         <CartAsideContainer>
@@ -31,11 +53,11 @@ export async function CartModalPage() {
 								key={cart.id}
 								className="grid grid-cols-[4rem,1fr,max-content] grid-rows-[auto,auto] gap-x-4 gap-y-2 py-6"
 							>
-								{cart.product_image ? (
+								{cart.product_image_url ? (
 									<div className="col-span-1 row-span-2 bg-neutral-100">
 										<Image
 											className="aspect-square rounded-md object-cover"
-											src={cart.product_image}
+											src={cart.product_image_url}
 											width={80}
 											height={80}
 											alt=""
