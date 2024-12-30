@@ -9,6 +9,7 @@ import { addToCartAction, createCartRequest } from "@/actions/cart-actions";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { toast } from "sonner";
+import { useCart } from "@/hooks/use-cart";
 
 export const AddToCartButton = ({
 	createCartRequest,
@@ -22,6 +23,7 @@ export const AddToCartButton = ({
 	const [pending, startTransition] = useTransition();
 	const isDisabled = disabled || pending;
 	const { setOpen } = useCartModal();
+	const { refreshCart } = useCart()
 
 	const router = useRouter();
 	const { isAuthenticated, getAccessToken } = useAuth();
@@ -38,6 +40,7 @@ export const AddToCartButton = ({
 			}
             const result = await addToCartAction(createCartRequest, accessToken);
             if (result) {
+				await refreshCart();
                 setOpen(true);
                 toast.success('Added to cart successfully');
             }
