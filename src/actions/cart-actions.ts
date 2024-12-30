@@ -10,12 +10,35 @@ interface CartsResponse {
 	message: string;
 }
 
-export async function getCartAction(): Promise<Cart[] | null> {
-	const cart = null; // TODO: Fetch cart from the API
-	if (cart) {
-		return structuredClone(cart);
-	}
-	return cart;
+export async function getCartAction(accessToken: string): Promise<Cart[]> {
+	try {
+		var cartServiceBaseUrl = getBaseUrl(cartService)
+		if (!cartServiceBaseUrl) {
+			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+		}
+
+		const response = await fetch(`${cartServiceBaseUrl}/v1/carts`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const carts: CartsResponse = await response.json();
+        if (carts && carts.data) {
+            return structuredClone(carts.data);
+        }
+
+		return [];
+	} catch (error) {
+        console.error('Error create cart:', error);
+		return [];
+    }
 }
 
 interface CartResponse {
@@ -32,7 +55,7 @@ export interface createCartRequest {
 	note: string
 }
 
-export async function addToCartAction(data: createCartRequest, router: AppRouterInstance, accessToken: string): Promise<Cart | null> {
+export async function addToCartAction(data: createCartRequest, accessToken: string): Promise<Cart | null> {
 	try {
 		var cartServiceBaseUrl = getBaseUrl(cartService)
 		if (!cartServiceBaseUrl) {
@@ -46,11 +69,6 @@ export async function addToCartAction(data: createCartRequest, router: AppRouter
             },
 			body: JSON.stringify(data),
         });
-
-		if (response.status === 401) {
-            router.push(`/auth/login`);
-            return null;
-		}
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

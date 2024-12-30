@@ -36,7 +36,7 @@ export const AddToCartButton = ({
 			if (!accessToken) {
 				return;
 			}
-            const result = await addToCartAction(createCartRequest, router, accessToken);
+            const result = await addToCartAction(createCartRequest, accessToken);
             if (result) {
                 setOpen(true);
                 toast.success('Added to cart successfully');

@@ -44,7 +44,6 @@ interface ProductAllResponse {
 
 export async function getAllProductsAction(): Promise<Product[] | null> {
     try {
-        console.log('Running in:', typeof window === 'undefined' ? 'server' : 'client');
         const productServiceBaseUrl = getBaseUrl(productService)
         const response = await fetch(`${productServiceBaseUrl}/v1/products/`, {
             method: 'GET',
