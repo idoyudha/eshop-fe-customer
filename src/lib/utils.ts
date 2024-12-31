@@ -25,7 +25,7 @@ export function getBaseUrl(serviceName: string) {
 type Money = { price: number; currency: string };
 
 export const formatMoney = ({ price, currency }: Money & { locale?: string }) => {
-	return new Intl.NumberFormat("id-ID", {
+	return new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency
 	}).format(price);

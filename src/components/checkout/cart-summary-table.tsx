@@ -1,11 +1,11 @@
 "use client"
 
-import { formatMoney } from "@/lib/utils";
+import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { useOptimistic } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../ui/table";
 import Image from "next/image";
 import { EshopLink } from "../eshop-link";
-import { CartItemLineTotal, CartItemQuantity } from "./cart-items.client";
+import { CartAmountWithSpinner, CartItemLineTotal, CartItemQuantity } from "./cart-items.client";
 import { CartEmpty } from "./cart-empty";
 import { useCart } from "@/hooks/use-cart";
 
@@ -37,7 +37,7 @@ export const CartSummaryTable = () => {
         return <CartEmpty />;
     }
 
-    // const totalPrice = calculateCartTotalPrice(optimisticCart);
+    const totalPrice = calculateCartTotalPrice(optimisticCart);
 
     return (
         <form>
@@ -99,6 +99,17 @@ export const CartSummaryTable = () => {
                         </TableRow>
                     ))}
                 </TableBody>
+                <TableFooter>
+                    <TableRow className="text-lg font-bold">
+						<TableCell className="hidden w-24 sm:table-cell"></TableCell>
+						<TableCell colSpan={3} className="text-right">
+							Total
+						</TableCell>
+						<TableCell className="text-right">
+							<CartAmountWithSpinner total={totalPrice} />
+						</TableCell>
+					</TableRow>
+                </TableFooter>
             </Table>
         </form>
     )
