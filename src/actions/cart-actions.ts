@@ -1,5 +1,6 @@
 import { getBaseUrl } from "@/lib/utils";
 import { Cart } from "@/models/cart";
+import { Address, Order } from "@/models/order";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 const cartService = 'CART_SERVICE';
@@ -146,5 +147,31 @@ export async function deleteCartAction(id: string, accessToken: string): Promise
     } catch (error) {
         console.error('Error delete cart:', error);
         return null;
+    }
+}
+
+export interface CartCheckoutRequest {
+    CartIds: string[]
+    Address: Address
+}
+
+export async function checkoutCartAction(data: CartCheckoutRequest, accessToken: string): Promise<void> {
+    try {
+        var cartServiceBaseUrl = getBaseUrl(cartService)
+        const response = await fetch(`${cartServiceBaseUrl}/v1/carts/checkout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+    } catch (error) {
+        console.error('Error checkout cart:', error);
     }
 }
