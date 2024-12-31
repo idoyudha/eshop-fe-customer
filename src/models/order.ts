@@ -13,6 +13,6 @@ interface Address {
     street: string;
     city: string;
     state: string;
-    zip: string;
-    notes: string;
+    zip_code: string;
+    note: string;
 }

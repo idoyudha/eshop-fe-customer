@@ -14,7 +14,6 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { useAuth } from "@/context/auth-context"
 import { useRouter } from "next/navigation"
-import { signInWithRedirect } from "aws-amplify/auth"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react"
 
