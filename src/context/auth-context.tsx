@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp, resendSignUpCode } from 'aws-amplify/auth';
+import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp, resendSignUpCode, signInWithRedirect } from 'aws-amplify/auth';
 
 interface AuthContextType {
     isAuthenticated: boolean;
@@ -11,6 +11,7 @@ interface AuthContextType {
     login: (username: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
     signup: (email: string, username: string, name: string, password: string) => Promise<void>;
+    signInWithGoogle: () => Promise<void>;
     confirmSignupCode: (email: string, code: string) => Promise<void>;
     resendVerificationCode: (username: string) => Promise<void>;
     getAccessToken: () => Promise<string | null>;
@@ -22,7 +23,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [user, setUser] = useState<AuthUser | null>(null);
     const [loading, setLoading] = useState(true);
-    const router = useRouter();
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -31,14 +31,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 const currentUser = await getCurrentUser();
                 setUser(currentUser);
                 setIsAuthenticated(true);
-
-                // explicitly fetch session
-                const session = await fetchAuthSession();
-                console.log("session data:", session);
-                
-                if (session?.tokens?.accessToken) {
-                    console.log("access token found:", session.tokens.accessToken);
-                }
             } catch (error) {
                 setUser(null);
                 setIsAuthenticated(false);
@@ -66,12 +58,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (isSignedIn) {
                 const currentUser = await getCurrentUser();
 
-                const session = await fetchAuthSession();
-                console.log("login session:", session);
-
                 setUser(currentUser);
                 setIsAuthenticated(true);
-                router.push('/');
             }
         } catch (error) {
             console.error('login error:', error);
@@ -79,9 +67,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const signInWithGoogle = async () => {
+        try {
+            await signInWithRedirect({
+                provider: 'Google'
+            });
+        } catch (error) {
+            console.error('Google sign-in error:', error);
+            throw error;
+        }
+    };
+
     const signup = async (email: string, username: string, name: string, password: string) => {
         try {
-            const { isSignUpComplete } = await signUp({
+            await signUp({
                 username: username,
                 password,
                 options: {
@@ -94,10 +93,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     }
                 }
             });
-
-            if (isSignUpComplete) {
-                router.push('/auth/verify');
-            }
         } catch (error) {
             console.error('signup error:', error);
             throw error;
@@ -106,14 +101,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const confirmSignupCode = async (email: string, code: string) => {
         try {
-            const { isSignUpComplete } = await confirmSignUp({
+            await confirmSignUp({
                 username: email,
                 confirmationCode: code
             });
-
-            if (isSignUpComplete) {
-                router.push('/');
-            }
         } catch (error) {
             console.error('confirmation error:', error);
             throw error;
@@ -134,7 +125,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             await signOut();
             setUser(null);
             setIsAuthenticated(false);
-            router.push('/');
         } catch (error) {
             console.error('logout error:', error);
         }
@@ -145,6 +135,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             isAuthenticated, 
             user, 
             login, 
+            signInWithGoogle,
             logout, 
             signup,
             confirmSignupCode,

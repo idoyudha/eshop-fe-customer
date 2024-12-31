@@ -3,17 +3,20 @@
 import { useAuth } from "@/context/auth-context"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { toast } from "sonner"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { cn } from "@/lib/utils"
 import { Label } from "../ui/label"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { ResendVerificationButton } from "./resend-verification-button"
+import { useToast } from "@/hooks/use-toast"
+import { Loader2 } from "lucide-react"
 
 export function VerifyForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
     const [email, setEmail] = useState("")
     const [code, setCode] = useState("")
+    const [loading, setLoading] = useState(false)
+    const { toast } = useToast();
     const router = useRouter()
 
     const { confirmSignupCode } = useAuth()
@@ -21,10 +24,21 @@ export function VerifyForm({ className, ...props }: React.ComponentPropsWithoutR
         e.preventDefault();
 
         try {
+            setLoading(true);
             await confirmSignupCode(email, code);
-            toast.success('Successfully verified, please log in');
+            toast({
+                title: 'Verification successful',
+                description: 'Verification successful. You can now login.',
+            })
+            router.push('/auth/login');
         } catch (error) {
-            toast.error('Verification failed. Please check the code and try again.');
+            toast({
+                variant: 'destructive',
+                title: 'Verification failed',
+                description: 'Verification failed. Please try again.',
+            })
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -61,8 +75,8 @@ export function VerifyForm({ className, ...props }: React.ComponentPropsWithoutR
                                 />
                             </div>
                             
-                            <Button type="submit" className="w-full">
-                                Verify
+                            <Button type="submit" className="w-full" disabled={loading}>
+                                {loading ? <Loader2 className="animate-spin" /> : 'Verify'}
                             </Button>
 
                             <div className="text-center">

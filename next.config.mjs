@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: [process.env.NEXT_PUBLIC_IMAGE_CLOUDFRONT]
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: process.env.NEXT_PUBLIC_IMAGE_CLOUDFRONT
+            }
+        ]
     },
     env: {
         NEXT_PUBLIC_PRODUCT_SERVICE: process.env.NEXT_PUBLIC_PRODUCT_SERVICE,

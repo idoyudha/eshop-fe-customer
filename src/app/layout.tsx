@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default function RootLayout({
                     <div className="flex min-h-full flex-1 flex-col bg-white" vaul-drawer-wrapper="">
                         {children}
                     </div>
-                    <Toaster position="top-center" offset={10} />
+                    <Toaster/>
                 </Providers>
             </body>
         </html>

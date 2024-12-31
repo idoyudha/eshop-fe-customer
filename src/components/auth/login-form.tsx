@@ -14,35 +14,52 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { useAuth } from "@/context/auth-context"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
 import { signInWithRedirect } from "aws-amplify/auth"
+import { useToast } from "@/hooks/use-toast"
+import { Loader2 } from "lucide-react"
 
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const { login } = useAuth()
+    const [loading, setLoading] = useState(false)
+    const { login, signInWithGoogle } = useAuth()
+    const { toast } = useToast()
     const router = useRouter()
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            setLoading(true);
             await login(email, password);
-            toast.success('Successfully logged in!');
+            toast({
+                title: 'Login successful',
+                description: 'Login successful. Welcome!',
+            })
+            router.push('/');
         } catch (error) {
-            toast.error('Login failed. Please check your credentials and try again.');
+            toast({
+                variant: 'destructive',
+                title: 'Login failed',
+                description: 'Login failed. Please try again.',
+            })  
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleGoogleLogin = async (e: React.MouseEvent) => {
         e.preventDefault();
         try {
-            await signInWithRedirect({ provider: 'Google' });
+            await signInWithGoogle();
             router.push('/');
         } catch (error) {
-            console.error('Google login error:', error);
-            toast.error('Google login failed. Please try again.');
+            toast({
+                variant: 'destructive',
+                title: 'Login failed',
+                description: 'Login failed. Please try again.',
+            })
         }
-      };
+    };
 
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -86,10 +103,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                                 />
                             </div>
                             <Button type="submit" className="w-full">
-                                Login
+                                {loading ? <Loader2 className="animate-spin" /> : 'Login'}
                             </Button>
                             <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
-                                Login with Google
+                                {loading ? <Loader2 className="animate-spin" /> : 'Login with Google'}
                             </Button>
                         </div>
                         <div className="mt-4 text-center text-sm">

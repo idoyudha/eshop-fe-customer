@@ -4,7 +4,6 @@ import { useAuth } from "@/context/auth-context";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "sonner";
 import {
     Card,
     CardContent,
@@ -15,6 +14,8 @@ import {
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
 export function SignupForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
     const [email, setEmail] = useState("")
@@ -22,20 +23,38 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
     const [name, setName] = useState("")
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [loading, setLoading] = useState(false)
     const { signup } = useAuth()
+    const { toast } = useToast();
     const router = useRouter()
 
     const handleSignUp = async (e: React.FormEvent) => {
         e.preventDefault();
         if (password !== confirmPassword) {
-            toast.error('Passwords do not match');
-            return;
+            console.log('password mismatch')
+            toast({
+                variant: 'destructive',
+                title: 'Password mismatch',
+                description: 'Password and confirm password do not match. Please try again.',
+            })
+            return
         }
         try {
+            setLoading(true);
             await signup(email, username, name, password);
-            toast.success('Successfully signed up, please check your email for verification code');
+            toast({
+                title: 'Signup successful',
+                description: 'Signup successful. Please check your email for verification code.',
+            })
+            router.push('/auth/verify');
         } catch (error) {
-            toast.error('Signup failed. Please check your credentials and try again.');
+            toast({
+                variant: 'destructive',
+                title: 'Failed to signup',
+                description: 'Failed to signup. Please try again.',
+            })
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -104,12 +123,9 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
                                     required 
                                 />
                             </div>
-                            <Button type="submit" className="w-full">
-                                Signup
+                            <Button type="submit" className="w-full" disabled={loading}>
+                                {loading ? <Loader2 className="animate-spin" /> : 'Signup'}
                             </Button>
-                            {/* <Button variant="outline" className="w-full" onClick={handleGoogleSignUp}>
-                                Login with Google
-                            </Button> */}
                         </div>
                     </form>
                 </CardContent>
