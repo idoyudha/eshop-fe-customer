@@ -17,6 +17,7 @@ import { useAuth } from "@/context/auth-context";
 import { useRouter } from "next/navigation";
 import { checkoutCartAction, getCartAction } from "@/actions/cart-actions";
 import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "../ui/textarea";
 
 export const CheckoutCart = () => {
 	const [loading, setLoading] = useState(false)
@@ -130,9 +131,8 @@ export const CheckoutCart = () => {
                             </div>
 							<div className="grid gap-2">
                                 <Label htmlFor="note">Note</Label>
-                                <Input
+                                <Textarea
                                     id="note"
-                                    type="text"
                                     value={address.note}
                                     onChange={(e) => setAddress({ ...address, note: e.target.value })}
                                     placeholder="Please call me first"

@@ -1,6 +1,7 @@
 import { Order } from "@/models/order";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { EshopLink } from "../eshop-link";
+import Image from "next/image";
 
 export const OrderCard = ({ order }: { order: Order }) => {
     return (
@@ -11,18 +12,24 @@ export const OrderCard = ({ order }: { order: Order }) => {
                     <CardDescription>Status: {order.status}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    {order.items.map((item) => (
-                        <div key={item.id}>
-                            <p>{item.name}</p>
-                            <p>Price: {item.price}</p>
-                            <p>Quantity: {item.quantity}</p>
+                    <div className="flex flex-row gap-8">
+                        <div className="basis-1/6">
+                            <Image 
+                                src={order.items[0].image_url} 
+                                alt="order item image" 
+                                width={250} 
+                                height={250} 
+                            />
                         </div>
-                    ))}
-                    <p>Total: {order.total}</p>
+                        <div className="shrink basis-5/6">
+                            <p>Total: {order.total}</p>
+                            <p>Address: {order.address.street}, {order.address.city}, {order.address.state}, {order.address.zipcode}</p>
+                            <p>Notes: {order.address.note}</p>
+                        </div>
+                    </div>
                 </CardContent>
                 <CardFooter>
-                    <p>Address: {order.address.street}, {order.address.city}, {order.address.state}, {order.address.zip_code}</p>
-                    <p>Notes: {order.address.note}</p>
+                    
                 </CardFooter>
             </Card>
         </EshopLink>

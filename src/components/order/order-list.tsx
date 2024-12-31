@@ -39,7 +39,7 @@ export const OrderList = () => {
         <>
             <ul className="mt-6 gap-4">
                 {orders.map((order) => (
-                    <OrderCard key={order.id} order={order} />
+                    <OrderCard key={order.id} order={order}/>
                 ))}
             </ul>
         </>

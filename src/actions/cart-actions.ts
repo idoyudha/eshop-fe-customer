@@ -1,7 +1,6 @@
 import { getBaseUrl } from "@/lib/utils";
 import { Cart } from "@/models/cart";
-import { Address, Order } from "@/models/order";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { Address } from "@/models/order";
 
 const cartService = 'CART_SERVICE';
 
