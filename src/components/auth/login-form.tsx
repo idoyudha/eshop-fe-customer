@@ -51,7 +51,6 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         e.preventDefault();
         try {
             await signInWithGoogle();
-            router.push('/');
         } catch (error) {
             toast({
                 variant: 'destructive',
