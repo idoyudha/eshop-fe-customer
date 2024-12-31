@@ -9,7 +9,7 @@ export interface Order  {
     status: string;
 }
 
-interface Address {
+export interface Address {
     street: string;
     city: string;
     state: string;

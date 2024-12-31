@@ -12,14 +12,17 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Address } from "@/models/order";
 
 export const CheckoutCart = () => {
-	const [street, setStreet] = useState("")
-	const [city, setCity] = useState("")
-	const [state, setState] = useState("")
-	const [zipCode, setZipCode] = useState("")
-	const [note, setNote] = useState("")
 	const [loading, setLoading] = useState(false)
+	const [address, setAddress] = useState<Address>({
+		street: "",
+		city: "",
+		state: "",
+		zip_code: "",
+		note: "",
+	})
 
     return (
 		<section className="max-w-md pb-12">
@@ -38,8 +41,8 @@ export const CheckoutCart = () => {
                                 <Input
                                     id="street"
                                     type="text"
-                                    value={street}
-                                    onChange={(e) => setStreet(e.target.value)}
+                                    value={address.street}
+                                    onChange={(e) => setAddress({ ...address, street: e.target.value })}
                                     required
                                 />
                             </div>
@@ -48,8 +51,8 @@ export const CheckoutCart = () => {
                                 <Input
                                     id="city"
                                     type="text"
-                                    value={city}
-                                    onChange={(e) => setCity(e.target.value)}
+                                    value={address.city}
+                                    onChange={(e) => setAddress({ ...address, city: e.target.value })}
                                     placeholder="Jakarta Selatan"
                                     required
                                 />
@@ -59,8 +62,8 @@ export const CheckoutCart = () => {
                                 <Input
                                     id="state"
                                     type="text"
-                                    value={state}
-                                    onChange={(e) => setState(e.target.value)}
+                                    value={address.state}
+                                    onChange={(e) => setAddress({ ...address, state: e.target.value })}
                                     placeholder="Jakarta"
                                     required
                                 />
@@ -70,8 +73,8 @@ export const CheckoutCart = () => {
                                 <Input
                                     id="zipcode"
                                     type="text"
-                                    value={zipCode}
-                                    onChange={(e) => setZipCode(e.target.value)}
+                                    value={address.zip_code}
+                                    onChange={(e) => setAddress({ ...address, zip_code: e.target.value })}
                                     placeholder="Jakarta"
                                     required
                                 />
@@ -81,8 +84,8 @@ export const CheckoutCart = () => {
                                 <Input
                                     id="note"
                                     type="text"
-                                    value={note}
-                                    onChange={(e) => setNote(e.target.value)}
+                                    value={address.note}
+                                    onChange={(e) => setAddress({ ...address, note: e.target.value })}
                                     placeholder="Please call me first"
                                 />
                             </div>
