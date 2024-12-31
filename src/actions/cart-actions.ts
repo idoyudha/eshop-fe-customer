@@ -128,6 +128,7 @@ export async function updateCartAction(data: updateCartRequest, accessToken: str
 export async function deleteCartAction(id: string, accessToken: string): Promise<null> {
     try {
         var cartServiceBaseUrl = getBaseUrl(cartService)
+        // TODO: find out properly
         if (!cartServiceBaseUrl) {
             cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
         }
@@ -151,13 +152,17 @@ export async function deleteCartAction(id: string, accessToken: string): Promise
 }
 
 export interface CartCheckoutRequest {
-    CartIds: string[]
-    Address: Address
+    cart_ids: string[]
+    address: Address
 }
 
 export async function checkoutCartAction(data: CartCheckoutRequest, accessToken: string): Promise<void> {
     try {
         var cartServiceBaseUrl = getBaseUrl(cartService)
+        // TODO: find out properly
+        if (!cartServiceBaseUrl) {
+            cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+        }
         const response = await fetch(`${cartServiceBaseUrl}/v1/carts/checkout`, {
             method: 'POST',
             headers: {

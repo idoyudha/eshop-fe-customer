@@ -64,6 +64,7 @@ export const CartSummaryTable = () => {
                                         width={96}
                                         height={96}
                                         alt={cart.product_name || ""}
+                                        priority={false}
                                     />
                                 )}
                             </TableCell>

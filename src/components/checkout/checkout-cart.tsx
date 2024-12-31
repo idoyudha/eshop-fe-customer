@@ -24,7 +24,7 @@ export const CheckoutCart = () => {
 		street: "",
 		city: "",
 		state: "",
-		zip_code: "",
+		zipcode: "",
 		note: "",
 	})
 
@@ -44,14 +44,22 @@ export const CheckoutCart = () => {
 				return;
 			}
             const carts = await getCartAction(accessToken);
+            if (!carts) {
+                toast({
+                    variant: "destructive",
+                    title: "Failed checkout cart",
+                    description: "Failed checkout cart. Please try again.",    
+                })
+                return
+            }
+            console.log("carts", carts)
             const cartIds = carts.map((cart) => cart.id);
             const CartCheckoutRequest = {
-                CartIds: cartIds,
-                Address: address
+                cart_ids: cartIds,
+                address: address
             }
             await checkoutCartAction(CartCheckoutRequest, accessToken);
-            // TODO: to order page
-            // router.push('/order/success')
+            router.push('/order')
         } catch (error) {
             toast({
                 variant: "destructive",
@@ -112,8 +120,8 @@ export const CheckoutCart = () => {
                                 <Input
                                     id="zipcode"
                                     type="text"
-                                    value={address.zip_code}
-                                    onChange={(e) => setAddress({ ...address, zip_code: e.target.value })}
+                                    value={address.zipcode}
+                                    onChange={(e) => setAddress({ ...address, zipcode: e.target.value })}
                                     placeholder="Jakarta"
                                     required
                                 />
