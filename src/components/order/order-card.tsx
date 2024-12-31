@@ -21,8 +21,8 @@ export const OrderCard = ({ order }: { order: Order }) => {
                     <p>Total: {order.total}</p>
                 </CardContent>
                 <CardFooter>
-                    <p>Address: {order.address.street}, {order.address.city}, {order.address.state}, {order.address.zip}</p>
-                    <p>Notes: {order.address.notes}</p>
+                    <p>Address: {order.address.street}, {order.address.city}, {order.address.state}, {order.address.zip_code}</p>
+                    <p>Notes: {order.address.note}</p>
                 </CardFooter>
             </Card>
         </EshopLink>

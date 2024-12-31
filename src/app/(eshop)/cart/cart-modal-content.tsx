@@ -1,9 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react";
-import { Cart } from "@/models/cart";
-import { useAuth } from "@/context/auth-context";
-import { getCartAction } from "@/actions/cart-actions";
 import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { EshopLink } from "@/components/eshop-link";
 import { Button } from "@/components/ui/button";
