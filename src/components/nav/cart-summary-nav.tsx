@@ -27,7 +27,7 @@ export const CartSummaryNav = () => {
 const CartSummaryNavInner = async () => {
 	const { carts } = useCart();
 
-	if (!carts) {
+	if (!carts || !carts.length) {
 		return <CartFallback />;
 	}
 
