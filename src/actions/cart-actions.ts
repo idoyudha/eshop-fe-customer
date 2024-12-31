@@ -157,26 +157,22 @@ export interface CartCheckoutRequest {
 }
 
 export async function checkoutCartAction(data: CartCheckoutRequest, accessToken: string): Promise<void> {
-    try {
-        var cartServiceBaseUrl = getBaseUrl(cartService)
-        // TODO: find out properly
-        if (!cartServiceBaseUrl) {
-            cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
-        }
-        const response = await fetch(`${cartServiceBaseUrl}/v1/carts/checkout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify(data),
-        });
+    var cartServiceBaseUrl = getBaseUrl(cartService)
+    if (!cartServiceBaseUrl) {
+        cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+    }
+    
+    const response = await fetch(`${cartServiceBaseUrl}/v1/carts/checkout`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(data),
+    });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-    } catch (error) {
-        console.error('Error checkout cart:', error);
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || `checkout failed with status: ${response.status}`);
     }
 }

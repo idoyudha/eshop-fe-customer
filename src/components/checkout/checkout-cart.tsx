@@ -32,7 +32,9 @@ export const CheckoutCart = () => {
     const { isAuthenticated, getAccessToken } = useAuth();
     const { toast } = useToast();	
 
-    const handleCheckout = async () => {
+    const handleCheckout = async (e: React.FormEvent) => {
+        e.preventDefault();
+
         if (!isAuthenticated) {
 			router.push('/auth/login');
 			return;
