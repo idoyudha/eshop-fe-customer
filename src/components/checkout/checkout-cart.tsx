@@ -13,6 +13,10 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Address } from "@/models/order";
+import { useAuth } from "@/context/auth-context";
+import { useRouter } from "next/navigation";
+import { checkoutCartAction, getCartAction } from "@/actions/cart-actions";
+import { useToast } from "@/hooks/use-toast";
 
 export const CheckoutCart = () => {
 	const [loading, setLoading] = useState(false)
@@ -24,6 +28,41 @@ export const CheckoutCart = () => {
 		note: "",
 	})
 
+    const router = useRouter()
+    const { isAuthenticated, getAccessToken } = useAuth();
+    const { toast } = useToast();	
+
+    const handleCheckout = async () => {
+        if (!isAuthenticated) {
+			router.push('/auth/login');
+			return;
+		}
+        try {
+            setLoading(true)
+            const accessToken = await getAccessToken();
+            if (!accessToken) {
+				return;
+			}
+            const carts = await getCartAction(accessToken);
+            const cartIds = carts.map((cart) => cart.id);
+            const CartCheckoutRequest = {
+                CartIds: cartIds,
+                Address: address
+            }
+            await checkoutCartAction(CartCheckoutRequest, accessToken);
+            // TODO: to order page
+            // router.push('/order/success')
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Failed checkout cart",
+                description: "Failed checkout cart. Please try again.",    
+            })
+            console.error('Failed checkout cart:', error);
+        }
+        setLoading(false)
+    }
+
     return (
 		<section className="max-w-md pb-12">
 			<Card>
@@ -34,7 +73,7 @@ export const CheckoutCart = () => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
+                    <form onSubmit={handleCheckout}>
                         <div className="flex flex-col gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="street">Street</Label>

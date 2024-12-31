@@ -8,8 +8,8 @@ import { Button } from "./ui/button";
 import { addToCartAction, createCartRequest } from "@/actions/cart-actions";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { toast } from "sonner";
 import { useCart } from "@/hooks/use-cart";
+import { useToast } from "@/hooks/use-toast";
 
 export const AddToCartButton = ({
 	createCartRequest,
@@ -24,6 +24,7 @@ export const AddToCartButton = ({
 	const isDisabled = disabled || pending;
 	const { setOpen } = useCartModal();
 	const { refreshCart } = useCart()
+	const { toast } = useToast();	
 
 	const router = useRouter();
 	const { isAuthenticated, getAccessToken } = useAuth();
@@ -42,10 +43,17 @@ export const AddToCartButton = ({
             if (result) {
 				await refreshCart();
                 setOpen(true);
-                toast.success('Added to cart successfully');
+                toast({
+					title: "Added to cart",
+					description: "Product added to cart successfully",
+				})
             }
         } catch (error) {
-            toast.error('Failed to add to cart');
+            toast({
+				variant: "destructive",
+				title: "Failed to add to cart",
+				description: "Failed to add to cart. Please try again.",
+			})
             console.error('Failed to add to cart:', error);
         }
 	};
