@@ -5,20 +5,50 @@ import { cn } from "@/lib/utils";
 import { Loader2Icon } from "lucide-react";
 import { useTransition } from "react";
 import { Button } from "./ui/button";
-import { addToCartAction } from "@/actions/cart-actions";
+import { addToCartAction, createCartRequest } from "@/actions/cart-actions";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/auth-context";
+import { toast } from "sonner";
+import { useCart } from "@/hooks/use-cart";
 
 export const AddToCartButton = ({
-	productId,
+	createCartRequest,
 	disabled,
 	className,
 }: {
-	productId: string;
+	createCartRequest: createCartRequest;
 	disabled?: boolean;
 	className?: string;
 }) => {
 	const [pending, startTransition] = useTransition();
 	const isDisabled = disabled || pending;
 	const { setOpen } = useCartModal();
+	const { refreshCart } = useCart()
+
+	const router = useRouter();
+	const { isAuthenticated, getAccessToken } = useAuth();
+
+	const handleAddToCart = async () => {
+		if (!isAuthenticated) {
+			router.push('/auth/login');
+			return;
+		}
+		try {
+            const accessToken = await getAccessToken();
+			if (!accessToken) {
+				return;
+			}
+            const result = await addToCartAction(createCartRequest, accessToken);
+            if (result) {
+				await refreshCart();
+                setOpen(true);
+                toast.success('Added to cart successfully');
+            }
+        } catch (error) {
+            toast.error('Failed to add to cart');
+            console.error('Failed to add to cart:', error);
+        }
+	};
 
 	return (
 		<Button
@@ -27,19 +57,15 @@ export const AddToCartButton = ({
 			type="submit"
 			className={cn("rounded-full text-lg relative", className)}
 			onClick={async (e) => {
-				if (isDisabled) {
-					e.preventDefault();
-					return;
-				}
+                if (isDisabled) {
+                    e.preventDefault();
+                    return;
+                }
 
-				setOpen(true);
-
-				startTransition(async () => {
-					const formData = new FormData();
-					formData.append("productId", productId);
-					await addToCartAction(formData);
-				});
-			}}
+                startTransition(async () => {
+                    await handleAddToCart();
+                });
+            }}
 			aria-disabled={isDisabled}
 		>
 			<span className={cn("transition-opacity ease-in", pending ? "opacity-0" : "opacity-100")}>

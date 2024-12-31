@@ -10,13 +10,13 @@ export const ProductList = async ({ products }: { products: Product[] }) => {
 				{products.map((product, idx) => {
 					return (
 						<li key={product.id} className="group">
-							<EshopLink href={`/product/${product.name}`}>
+							<EshopLink href={`/product/${product.id}`}>
 								<article className="overflow-hidden bg-white">
-									{product.imageUrl && (
-										<div className="rounded-lg aspect-square w-full overflow-hidden bg-neutral-100">
+									{product.image_url && (
+										<div className="rounded-lg aspect-[3/2] w-full overflow-hidden bg-neutral-100">
 											<Image
 												className="group-hover:rotate hover-perspective w-full bg-neutral-100 object-cover object-center transition-opacity group-hover:opacity-75"
-												src={product.imageUrl}
+												src={product.image_url}
 												width={768}
 												height={768}
 												loading={idx < 3 ? "eager" : "lazy"}
@@ -33,7 +33,7 @@ export const ProductList = async ({ products }: { products: Product[] }) => {
 												<p>
 													{formatMoney({
 														price: product.price,
-														currency: "IDR",
+														currency: "USD",
 													})}
 												</p>
 											)}

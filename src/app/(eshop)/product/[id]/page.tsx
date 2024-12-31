@@ -1,6 +1,7 @@
-import { getProductAction } from "@/actions/product-actions";
+import { getCategoryByID, getProductAction } from "@/actions/product-actions";
 import { AddToCartButton } from "@/components/add-to-cart-button";
 import { EshopLink } from "@/components/eshop-link";
+import { ProductActions } from "@/components/products/product-action";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { deslugify, formatMoney } from "@/lib/utils";
 import Image from "next/image";
@@ -8,17 +9,14 @@ import { notFound } from "next/navigation";
 
 export default async function ProductPage(props: {
 	params: Promise<{ id: string }>;
-	searchParams: Promise<{ variant?: string; image?: string }>;
 }) {
     const params = await props.params;
-    const searchParams = await props.searchParams;
     const product = await getProductAction(params.id);
     if (!product) {
         return notFound();
     }
-    const selectedVariant = searchParams.variant;
-    const category = product.category.name;
-    const image = product.imageUrl;
+    const category = await getCategoryByID(product.category_id);
+    const image = product.image_url;
 
     return (
         <article className="pb-12">
@@ -34,7 +32,7 @@ export default async function ProductPage(props: {
 							<BreadcrumbSeparator />
 							<BreadcrumbItem>
 								<BreadcrumbLink className="inline-flex min-h-12 min-w-12 items-center justify-center" asChild>
-									<EshopLink href={`/category/${category}`}>{deslugify(category)}</EshopLink>
+									<EshopLink href={`/category/${category.id}`}>{deslugify(category.name)}</EshopLink>
 								</BreadcrumbLink>
 							</BreadcrumbItem>
 						</>
@@ -43,14 +41,6 @@ export default async function ProductPage(props: {
 					<BreadcrumbItem>
 						<BreadcrumbPage>{product.name}</BreadcrumbPage>
 					</BreadcrumbItem>
-                    {selectedVariant && (
-						<>
-							<BreadcrumbSeparator />
-							<BreadcrumbItem>
-								<BreadcrumbPage>{deslugify(selectedVariant)}</BreadcrumbPage>
-							</BreadcrumbItem>
-						</>
-					)}
                 </BreadcrumbList>
             </Breadcrumb>
             <div className="mt-4 grid gap-4 lg:grid-cols-12">
@@ -60,7 +50,7 @@ export default async function ProductPage(props: {
 						<p className="mt-2 text-2xl font-medium leading-none tracking-tight text-foreground/70">
 							{formatMoney({
                                 price: product.price,
-                                currency: "IDR",
+                                currency: "USD",
                             })}
 						</p>
 					)}
@@ -93,7 +83,15 @@ export default async function ProductPage(props: {
                             {product.description}
                         </div>
                     </section>
-                    <AddToCartButton productId={product.id} disabled={product.quantity <= 0} />
+                    <ProductActions 
+                        initialProduct={{
+                            id: product.id,
+                            name: product.name,
+                            image_url: product.image_url,
+                            price: product.price,
+                            quantity: product.quantity
+                        }} 
+                    />
                 </div>
             </div>
             

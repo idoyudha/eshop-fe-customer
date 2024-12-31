@@ -2,6 +2,9 @@ import { EshopLink } from "@/components/eshop-link";
 import Image from "next/image";
 import EshopConfig from "@/eshop.config";
 import { CategoryBox } from "@/components/category-box";
+import CarImage from "@/images/rav4.jpg";
+import { getAllProductsAction } from "@/actions/product-actions";
+import { ProductList } from "@/components/products/product-list";
 
 export const metadata = {
     title: "Eshop Ecommerce",
@@ -9,6 +12,10 @@ export const metadata = {
 };
 
 export default async function Home() {
+	const products = await getAllProductsAction();
+	if (products === null) {
+		return null;
+	}
     return (
         <main>
             <section className="rounded bg-neutral-100 py-8 sm:py-12">
@@ -24,13 +31,12 @@ export default async function Home() {
 						</EshopLink>
 					</div>
 					<Image
-						alt="Cup of Coffee"
+						alt="Mazda CX 5"
 						loading="eager"
 						priority={true}
-						className="rounded"
 						height={450}
 						width={450}
-						src=""
+						src={CarImage}
 						style={{
 							objectFit: "cover",
 						}}
@@ -39,12 +45,12 @@ export default async function Home() {
 				</div>
 			</section>
 
-			{/* <ProductList products={products} /> */}
+			<ProductList products={products} />
 
 			<section className="w-full py-8">
 				<div className="grid gap-8 lg:grid-cols-2">
-					{EshopConfig.categories.map(({ slug, image: src }) => (
-						<CategoryBox key={slug} categorySlug={slug} src={src} />
+					{EshopConfig.categories.map(({ slug, image: src, category_id }) => (
+						<CategoryBox key={slug} categorySlug={slug} categoryId={category_id} src={src} />
 					))}
 				</div>
 			</section>

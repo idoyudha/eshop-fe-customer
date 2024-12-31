@@ -1,68 +1,150 @@
+import { getBaseUrl } from "@/lib/utils";
 import { Cart } from "@/models/cart";
-import { revalidateTag } from "next/cache";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export async function getCartAction(): Promise<Cart[] | null> {
-	const cart = null; // TODO: Fetch cart from the API
-	if (cart) {
-		return structuredClone(cart);
-	}
-	return cart;
-}
-export async function addToCartAction(formData: FormData) {
-	const productId = formData.get("productId");
-	if (!productId || typeof productId !== "string") {
-		throw new Error("Invalid product ID");
-	}
+const cartService = 'CART_SERVICE';
 
-	const cart = await getCartAction();
-
-	const updatedCart = null;
-	if (updatedCart) {
-        // TODO: Update cart in the API
-		// await setCartCookieJson({
-		// 	id: updatedCart.id,
-		// 	linesCount: Commerce.cartCount(updatedCart.metadata),
-		// });
-		return structuredClone(updatedCart);
-	}
+interface CartsResponse {
+	code: number;
+	data: Cart[];
+	message: string;
 }
 
-export async function increaseQuantity(productId: string) {
-	const cart = await getCartAction();
-	if (!cart) {
-		throw new Error("Cart not found");
-	}
-	// await Commerce.cartChangeQuantity({
-	// 	productId,
-	// 	cartId: cart.cart.id,
-	// 	operation: "INCREASE",
-	// });
+export async function getCartAction(accessToken: string): Promise<Cart[]> {
+	try {
+		var cartServiceBaseUrl = getBaseUrl(cartService)
+		if (!cartServiceBaseUrl) {
+			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+		}
+
+		const response = await fetch(`${cartServiceBaseUrl}/v1/carts/user`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const carts: CartsResponse = await response.json();
+        if (carts && carts.data) {
+            return structuredClone(carts.data);
+        }
+
+		return [];
+	} catch (error) {
+        console.error('Error create cart:', error);
+		return [];
+    }
 }
 
-export async function decreaseQuantity(productId: string) {
-	const cart = await getCartAction();
-	if (!cart) {
-		throw new Error("Cart not found");
-	}
-	// await Commerce.cartChangeQuantity({
-	// 	productId,
-	// 	cartId: cart.cart.id,
-	// 	operation: "DECREASE",
-	// });
+interface CartResponse {
+	code: number;
+	data: Cart;
+	message: string;
 }
 
-export async function setQuantity({
-	productId,
-	cartId,
-	quantity,
-}: {
-	productId: string;
-	cartId: string;
-	quantity: number;
-}) {
-	const cart = await getCartAction();
-	if (!cart) {
-		throw new Error("Cart not found");
-	}
-	// await Commerce.cartSetQuantity({ productId, cartId, quantity });
+export interface createCartRequest {
+	product_id: string
+	product_name: string
+    product_image_url: string
+	product_price: number
+	product_quantity: number
+	note: string
+}
+
+export async function addToCartAction(data: createCartRequest, accessToken: string): Promise<Cart | null> {
+	try {
+		var cartServiceBaseUrl = getBaseUrl(cartService)
+		if (!cartServiceBaseUrl) {
+			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+		}
+		const response = await fetch(`${cartServiceBaseUrl}/v1/carts`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken}`,
+            },
+			body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const cart: CartResponse = await response.json();
+        if (cart && cart.data) {
+            return structuredClone(cart.data);
+        }
+
+        return null;
+	} catch (error) {
+        console.error('Error create cart:', error);
+        return null;
+    }
+}
+
+export interface updateCartRequest {
+    cart_id: string
+	product_quantity: number
+	note: string
+}
+
+export async function updateCartAction(data: updateCartRequest, accessToken: string): Promise<Cart | null> {
+    try {
+		var cartServiceBaseUrl = getBaseUrl(cartService)
+		if (!cartServiceBaseUrl) {
+			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+		}
+		const response = await fetch(`${cartServiceBaseUrl}/v1/carts/${data.cart_id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+				'Authorization': `Bearer ${accessToken}`,
+            },
+			body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const cart: CartResponse = await response.json();
+        if (cart && cart.data) {
+            return structuredClone(cart.data);
+        }
+
+        return null;
+	} catch (error) {
+        console.error('Error update cart:', error);
+        return null;
+    }
+}
+
+export async function deleteCartAction(id: string, accessToken: string): Promise<null> {
+    try {
+        var cartServiceBaseUrl = getBaseUrl(cartService)
+        if (!cartServiceBaseUrl) {
+            cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
+        }
+        const response = await fetch(`${cartServiceBaseUrl}/v1/carts/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        return null;
+    } catch (error) {
+        console.error('Error delete cart:', error);
+        return null;
+    }
 }

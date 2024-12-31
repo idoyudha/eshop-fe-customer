@@ -1,9 +1,14 @@
-import { calculateCartTotalItems, calculateCartTotalPrice, formatMoney } from "@/lib/utils";
+"use client"
+
+import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { ShoppingBagIcon } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { CartLink } from "./cart-link";
 import { getCartAction } from "@/actions/cart-actions";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { useAuth } from "@/context/auth-context";
+import { Cart } from "@/models/cart";
+import { useCart } from "@/hooks/use-cart";
 
 const CartFallback = () => (
 	<div className="h-6 w-6 opacity-30">
@@ -20,16 +25,14 @@ export const CartSummaryNav = () => {
 };
 
 const CartSummaryNavInner = async () => {
-	const carts = await getCartAction();
-	if (!carts) {
-		return <CartFallback />;
-	}
+	const { carts } = useCart();
+
 	if (!carts) {
 		return <CartFallback />;
 	}
 
 	const totalPrice = calculateCartTotalPrice(carts);
-	const totalItems = calculateCartTotalItems(carts);
+	const totalItems = carts.reduce((acc, cart) => acc + cart.product_quantity, 0);
 
 	return (
 		<TooltipProvider>
@@ -46,7 +49,7 @@ const CartSummaryNavInner = async () => {
 								{"Total"}:{" "}
 								{formatMoney({
 									price: totalPrice,
-									currency: "IDR",
+									currency: "USD",
 								})}
 							</span>
 						</CartLink>
@@ -55,7 +58,7 @@ const CartSummaryNavInner = async () => {
 				<TooltipContent side="left" sideOffset={25}>
 					<p>Total Items { totalItems }</p>
 					<p>
-						{"Total"}: {formatMoney({ price: totalPrice, currency: "IDR" })}
+						{"Total"}: {formatMoney({ price: totalPrice, currency: "USD" })}
 					</p>
 				</TooltipContent>
 			</Tooltip>
