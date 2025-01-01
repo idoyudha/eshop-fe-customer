@@ -5,6 +5,7 @@ import Image from "next/image";
 import { formatMoney } from "@/lib/utils";
 import { OrderStatusBadge } from "./order-status-badge";
 import { PaymentStatusBadge } from "../payment/payment-status-badge";
+import { Button } from "../ui/button";
 
 export const OrderCard = ({ order }: { order: OrderView }) => {
     return (
@@ -42,7 +43,9 @@ export const OrderCard = ({ order }: { order: OrderView }) => {
                 </CardContent>
                 <CardFooter className="flex justify-end">
                     <EshopLink href={`/orders/${order.id}`}>
-                        <div className="text-lg font-semibold">View Detail Order</div>
+                        <Button variant="outline">
+                            View Detail Order
+                        </Button>
                     </EshopLink>
                 </CardFooter>
             </Card>
