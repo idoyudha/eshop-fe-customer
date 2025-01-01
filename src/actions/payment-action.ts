@@ -23,7 +23,7 @@ export async function uploadPaymentAction(data: createPaymentRequest, accessToke
 
     const formData = new FormData();
     formData.append('orderId', data.orderId);
-    formData.append('imageUrl', data.image);
+    formData.append('image', data.image);
     formData.append('note', data.note);
 
     const response = await fetch(`${paymentServiceBaseURL}/v1/payments`, {
