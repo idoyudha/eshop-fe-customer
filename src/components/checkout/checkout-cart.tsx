@@ -55,7 +55,6 @@ export const CheckoutCart = () => {
                 })
                 return
             }
-            console.log("carts", carts)
             const cartIds = carts.map((cart) => cart.id);
             const CartCheckoutRequest = {
                 cart_ids: cartIds,

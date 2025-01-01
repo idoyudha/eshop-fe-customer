@@ -2,7 +2,8 @@
 
 import { getOrderAction } from "@/actions/order-action";
 import { OrderStatusBadge } from "@/components/order/order-status-badge";
-import { Button } from "@/components/ui/button";
+import { PaymentProofUpload } from "@/components/payment/payment-proof-upload";
+import { PaymentStatusBadge } from "@/components/payment/payment-status-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/context/auth-context";
 import { formatMoney } from "@/lib/utils";
@@ -84,6 +85,7 @@ export default function OrderPage(props: {
                                                 src={item.image_url}
                                                 alt={item.name}
                                                 fill
+                                                sizes="(max-width: 640px) 70vw, 450px"
                                                 priority
                                                 className="object-cover rounded-md"
                                             />
@@ -117,6 +119,12 @@ export default function OrderPage(props: {
                                     {formatMoney({ price: order.total_price, currency: "USD" })}
                                 </p>
                             </div>
+                            <div className="flex justify-between">
+                                <p className="text-muted-foreground">Shipping Fee</p>
+                                <p className="font-medium">
+                                    {formatMoney({ price: 0, currency: "USD" })}
+                                </p>
+                            </div>
                             <div className="flex justify-between text-lg font-semibold">
                                 <p>Total</p>
                                 <p>{formatMoney({ price: order.total_price, currency: "USD" })}</p>
@@ -132,19 +140,11 @@ export default function OrderPage(props: {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="flex items-center gap-2">
-                                <p className="text-sm text-muted-foreground">Status:</p>
-                                <p className="font-medium">{order.payment_status}</p>
+                                <PaymentStatusBadge status={order.payment_status} />
                             </div>
                             
-                            {order.payment_status === "PENDING" ? (
-                                <div className="space-y-4">
-                                    <p className="text-sm text-muted-foreground">
-                                        Please upload your payment proof
-                                    </p>
-                                    <Button className="w-full">
-                                        Upload Payment Proof
-                                    </Button>
-                                </div>
+                            {order.payment_status === "PENDING" || order.payment_status === "" ? (
+                                <PaymentProofUpload order_id={order.id} />
                             ) : order.payment_image_url && (
                                 <div className="space-y-2">
                                     <p className="text-sm text-muted-foreground">Payment Proof:</p>
