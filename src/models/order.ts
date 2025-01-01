@@ -4,7 +4,6 @@ export interface Order  {
     id: string;
     user_id: string;
     items: Product[];
-    total: number;
     address: Address;
     status: string;
 }
@@ -15,4 +14,16 @@ export interface Address {
     state: string;
     zipcode: string;
     note: string;
+}
+
+export interface OrderView {
+    id: string;
+    status: string;
+    total_price: number;
+    payment_id: string; 
+    payment_status: string;
+    payment_image_url: string;
+    items: Product[];
+    address: Address;
+    created_at: Date;
 }

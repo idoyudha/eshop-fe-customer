@@ -1,6 +1,6 @@
 "use client"
 
-import { Order } from "@/models/order";
+import { Order, OrderView } from "@/models/order";
 import { OrderCard } from "./order-card";
 import { useAuth } from "@/context/auth-context";
 import { useCallback, useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import { getOrdersAction } from "@/actions/order-action";
 
 export const OrderList = () => {
     const { getAccessToken } = useAuth();
-    const [orders, setOrders] = useState<Order[]>([]);
+    const [orders, setOrders] = useState<OrderView[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchOrders = useCallback(async () => {

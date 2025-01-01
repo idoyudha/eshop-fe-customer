@@ -1,15 +1,15 @@
 import { getBaseUrl } from "@/lib/utils";
-import { Order } from "@/models/order";
+import { Order, OrderView } from "@/models/order";
 
 const orderService = 'ORDER_SERVICE';
 
 interface OrderResponse {
     code: number;
-    data: Order[];
+    data: OrderView[];
     message: string;
 }
 
-export async function getOrdersAction(accessToken: string): Promise<Order[]> {
+export async function getOrdersAction(accessToken: string): Promise<OrderView[]> {
     var orderServiceBaseUrl = getBaseUrl(orderService)
     if (!orderServiceBaseUrl) {
         orderServiceBaseUrl = process.env.NEXT_PUBLIC_ORDER_SERVICE || "http://localhost:2003"
