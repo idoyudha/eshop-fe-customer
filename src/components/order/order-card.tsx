@@ -42,7 +42,7 @@ export const OrderCard = ({ order }: { order: OrderView }) => {
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                    <EshopLink href={`/orders/${order.id}`}>
+                    <EshopLink href={`/order/${order.id}`}>
                         <Button variant="outline">
                             View Detail Order
                         </Button>

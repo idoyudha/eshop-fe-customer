@@ -1,5 +1,4 @@
 import { getCategoryByID, getProductAction } from "@/actions/product-actions";
-import { AddToCartButton } from "@/components/add-to-cart-button";
 import { EshopLink } from "@/components/eshop-link";
 import { ProductActions } from "@/components/products/product-action";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
