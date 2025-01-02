@@ -61,7 +61,7 @@ export const CheckoutCart = () => {
                 address: address
             }
             await checkoutCartAction(CartCheckoutRequest, accessToken);
-            router.push('/order')
+            router.push('/orders')
         } catch (error) {
             toast({
                 variant: "destructive",
