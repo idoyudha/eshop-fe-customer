@@ -46,7 +46,7 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
                 title: 'Signup successful',
                 description: 'Signup successful. Please check your email for verification code.',
             })
-            router.push('/auth/verify');
+            router.push(`/auth/verify?username=${encodeURIComponent(username)}`);
         } catch (error) {
             toast({
                 variant: 'destructive',

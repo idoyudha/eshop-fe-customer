@@ -12,7 +12,7 @@ interface AuthContextType {
     logout: () => Promise<void>;
     signup: (email: string, username: string, name: string, password: string) => Promise<void>;
     signInWithGoogle: () => Promise<void>;
-    confirmSignupCode: (email: string, code: string) => Promise<void>;
+    confirmSignupCode: (username: string, code: string) => Promise<void>;
     resendVerificationCode: (username: string) => Promise<void>;
     getAccessToken: () => Promise<string | null>;
 }
@@ -99,10 +99,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const confirmSignupCode = async (email: string, code: string) => {
+    const confirmSignupCode = async (username: string, code: string) => {
         try {
             await confirmSignUp({
-                username: email,
+                username: username,
                 confirmationCode: code
             });
         } catch (error) {
