@@ -14,12 +14,34 @@ export function invariant(condition: unknown, message: string): asserts conditio
 
 export function getBaseUrl(serviceName: string) {
 	if (typeof window === 'undefined') {
-		// server-side
-        return process.env[serviceName] || '';
-	}
-	// client-side
-	const nextPublicName = `NEXT_PUBLIC_${serviceName}`;
-    return process.env[nextPublicName] || '';
+        // server-side
+        switch(serviceName) {
+            case 'PRODUCT_SERVICE':
+                return process.env.PRODUCT_SERVICE || '';
+            case 'CART_SERVICE':
+                return process.env.CART_SERVICE || '';
+            case 'ORDER_SERVICE':
+                return process.env.ORDER_SERVICE || '';
+            case 'PAYMENT_SERVICE':
+                return process.env.PAYMENT_SERVICE || '';
+            default:
+                return '';
+        }
+    }
+    
+    // client-side
+    switch(serviceName) {
+        case 'PRODUCT_SERVICE':
+            return process.env.NEXT_PUBLIC_PRODUCT_SERVICE || '';
+        case 'CART_SERVICE':
+            return process.env.NEXT_PUBLIC_CART_SERVICE || '';
+        case 'ORDER_SERVICE':
+            return process.env.NEXT_PUBLIC_ORDER_SERVICE || '';
+        case 'PAYMENT_SERVICE':
+            return process.env.NEXT_PUBLIC_PAYMENT_SERVICE || '';
+        default:
+            return '';
+    }
 }
 
 type Money = { price: number; currency: string };
