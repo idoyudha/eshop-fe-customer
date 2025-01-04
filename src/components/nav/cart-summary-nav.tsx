@@ -4,11 +4,8 @@ import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { ShoppingBagIcon } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import { CartLink } from "./cart-link";
-import { getCartAction } from "@/actions/cart-actions";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
-import { useAuth } from "@/context/auth-context";
-import { Cart } from "@/models/cart";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/context/cart-modal";
 
 const CartFallback = () => (
 	<div className="h-6 w-6 opacity-30">

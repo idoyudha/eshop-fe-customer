@@ -5,7 +5,7 @@ import { EshopLink } from "@/components/eshop-link";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { CartAsideContainer } from "./cart-aside";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/context/cart-modal";
 
 export function CartModalContent() {
     const { carts } = useCart();

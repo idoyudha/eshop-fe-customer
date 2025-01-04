@@ -1,6 +1,6 @@
 "use client";
 
-import { useCartModal } from "@/context/cart-modal";
+import { useCart, useCartModal } from "@/context/cart-modal";
 import { cn } from "@/lib/utils";
 import { Loader2Icon } from "lucide-react";
 import { useTransition } from "react";
@@ -8,7 +8,6 @@ import { Button } from "./ui/button";
 import { addToCartAction, createCartRequest } from "@/actions/cart-actions";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
-import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 
 export const AddToCartButton = ({
@@ -23,7 +22,7 @@ export const AddToCartButton = ({
 	const [pending, startTransition] = useTransition();
 	const isDisabled = disabled || pending;
 	const { setOpen } = useCartModal();
-	const { refreshCart } = useCart()
+	const { refreshCart } = useCart();
 	const { toast } = useToast();	
 
 	const router = useRouter();

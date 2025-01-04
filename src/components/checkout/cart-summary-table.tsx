@@ -7,7 +7,7 @@ import Image from "next/image";
 import { EshopLink } from "../eshop-link";
 import { CartAmountWithSpinner, CartItemLineTotal, CartItemQuantity } from "./cart-items.client";
 import { CartEmpty } from "./cart-empty";
-import { useCart } from "@/hooks/use-cart";
+import { useCart } from "@/context/cart-modal";
 
 export const CartSummaryTable = () => {
     const { carts, isLoading } = useCart();
