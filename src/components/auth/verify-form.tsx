@@ -32,6 +32,7 @@ export function VerifyForm({ className, ...props }: React.ComponentPropsWithoutR
             })
             router.push('/auth/login');
         } catch (error) {
+            console.error('Verification error:', error);
             toast({
                 variant: 'destructive',
                 title: 'Verification failed',

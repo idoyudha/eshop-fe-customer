@@ -3,7 +3,6 @@ import { EshopLink } from "../eshop-link";
 import { AuthNav } from "./auth-nav";
 import { CartSummaryNav } from "./cart-summary-nav";
 import { NavMenu } from "./nav-menu";
-import { SearchNav } from "./search-nav";
 
 export const Nav = async () => {
 	return (

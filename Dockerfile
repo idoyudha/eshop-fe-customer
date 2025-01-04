@@ -20,13 +20,13 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Copy env file
-COPY .env.local .env.local
+COPY .env .env
 
 # Build the application
 RUN npm run build
 
 # Step 3: Production stage
-FROM node:20.13.1-slim AS runner
+FROM node:20.13.1-slim AS production
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1

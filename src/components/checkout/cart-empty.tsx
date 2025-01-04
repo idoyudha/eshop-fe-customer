@@ -1,4 +1,4 @@
-import { CarIcon, ShoppingCartIcon } from "lucide-react";
+import { CarIcon } from "lucide-react";
 import { EshopLink } from "../eshop-link";
 
 export async function CartEmpty() {

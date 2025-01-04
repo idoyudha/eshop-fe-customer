@@ -48,6 +48,7 @@ export function SignupForm({ className, ...props }: React.ComponentPropsWithoutR
             })
             router.push('/auth/verify');
         } catch (error) {
+            console.error('Signup error:', error);
             toast({
                 variant: 'destructive',
                 title: 'Failed to signup',

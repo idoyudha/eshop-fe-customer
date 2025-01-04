@@ -34,7 +34,7 @@ export async function Footer() {
 					</div>
 				</div>
 
-				{sections.map((section, index) => (
+				{sections.map((section) => (
 					<section key={section.header}>
 					<h3 className="mb-2 font-semibold">{section.header}</h3>
 					<ul role="list" className="grid gap-1">

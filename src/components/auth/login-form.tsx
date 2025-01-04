@@ -36,6 +36,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             })
             router.push('/');
         } catch (error) {
+            console.error('Login error:', error);
             toast({
                 variant: 'destructive',
                 title: 'Login failed',
@@ -51,6 +52,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         try {
             await signInWithGoogle();
         } catch (error) {
+            console.error('Google login error:', error);
             toast({
                 variant: 'destructive',
                 title: 'Login failed',

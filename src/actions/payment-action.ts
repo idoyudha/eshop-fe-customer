@@ -1,5 +1,4 @@
 import { getBaseUrl } from "@/lib/utils";
-import { Payment } from "@/models/payment";
 
 const paymentService = 'PAYMENT_SERVICE';
 
@@ -16,7 +15,7 @@ export interface createPaymentRequest {
 }
 
 export async function uploadPaymentAction(data: createPaymentRequest, accessToken: string): Promise<void> {
-    var paymentServiceBaseURL = getBaseUrl(paymentService)
+    const paymentServiceBaseURL = getBaseUrl(paymentService)
 
     const formData = new FormData();
     formData.append('orderId', data.orderId);
