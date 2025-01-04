@@ -8,6 +8,17 @@ export interface Order  {
     status: string;
 }
 
+interface OrderItemView {
+    order_id: string;
+    product_id: string;
+    product_name: string;
+    image_url: string;
+    price: number;
+    quantity: number;
+    shipping_cost: number;
+    note: string;
+}
+
 export interface Address {
     street: string;
     city: string;
@@ -23,7 +34,7 @@ export interface OrderView {
     payment_id: string; 
     payment_status: string;
     payment_image_url: string;
-    items: Product[];
+    items: OrderItemView[];
     address: Address;
     created_at: Date;
 }

@@ -18,6 +18,8 @@ export default function OrderPage(props: {
     const { getAccessToken } = useAuth();
     const [order, setOrder] = useState<OrderView | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [subtotal, setSubtotal] = useState(0);
+    const [shippingFee, setShippingFee] = useState(0);
 
     const fetchOrder = useCallback(async () => {
         try {
@@ -27,6 +29,10 @@ export default function OrderPage(props: {
             if (accessToken) {
                 const orderData = await getOrderAction(accessToken, params.id);
                 setOrder(orderData || null);
+                const shippingCost = orderData?.items.reduce((total, item) => total + item.shipping_cost, 0);
+                const subtotal = orderData?.items.reduce((total, item) => total + item.price * item.quantity, 0);
+                setSubtotal(subtotal || 0);
+                setShippingFee(shippingCost);
             }
         } catch (error) {
             setOrder(null);
@@ -77,13 +83,13 @@ export default function OrderPage(props: {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {order.items.map((item, index) => (
-                                <div key={item.id}>
+                                <div key={item.product_id}>
                                     <div className="flex gap-4">
                                         <div className="w-40 h-20 relative">
                                             <Image
                                                 key={index}
                                                 src={item.image_url}
-                                                alt={item.name}
+                                                alt={item.product_name}
                                                 fill
                                                 sizes="(max-width: 640px) 70vw, 450px"
                                                 priority
@@ -91,15 +97,20 @@ export default function OrderPage(props: {
                                             />
                                         </div>
                                         <div className="flex-1">
-                                            <p className="font-medium">{item.name}</p>
+                                            <p className="font-medium">{item.product_name}</p>
                                             <p className="text-sm text-muted-foreground">
                                                 Quantity: {item.quantity}
                                             </p>
+                                        </div>
+                                        <div className="flex flex-col justify-between">
                                             <p className="text-sm font-medium">
                                                 Price: {formatMoney({ price: item.price, currency: "USD" })}
                                             </p>
                                             <p className="text-sm font-medium">
                                                 Subtotal: {formatMoney({ price: item.price * item.quantity, currency: "USD" })}
+                                            </p>
+                                            <p className="text-sm text-muted-foreground">
+                                                Shipping Fee: {formatMoney({ price: item.shipping_cost, currency: "USD" })}
                                             </p>
                                         </div>
                                     </div>
@@ -116,13 +127,13 @@ export default function OrderPage(props: {
                             <div className="flex justify-between">
                                 <p className="text-muted-foreground">Subtotal</p>
                                 <p className="font-medium">
-                                    {formatMoney({ price: order.total_price, currency: "USD" })}
+                                    {formatMoney({ price: subtotal, currency: "USD" })}
                                 </p>
                             </div>
                             <div className="flex justify-between">
                                 <p className="text-muted-foreground">Shipping Fee</p>
                                 <p className="font-medium">
-                                    {formatMoney({ price: 0, currency: "USD" })}
+                                    {formatMoney({ price: shippingFee, currency: "USD" })}
                                 </p>
                             </div>
                             <div className="flex justify-between text-lg font-semibold">

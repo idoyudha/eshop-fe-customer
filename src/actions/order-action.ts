@@ -44,10 +44,6 @@ interface OrderResponse {
 
 export async function getOrderAction(accessToken: string, id: string): Promise<OrderView> {
     var orderServiceBaseUrl = getBaseUrl(orderService)
-    if (!orderServiceBaseUrl) {
-        orderServiceBaseUrl = process.env.NEXT_PUBLIC_ORDER_SERVICE || "http://localhost:2003"
-    }
-
     const response = await fetch(`${orderServiceBaseUrl}/v1/orders/${id}`, {
         method: 'GET',
         headers: {
