@@ -53,7 +53,15 @@ export default async function ProductPage(props: {
                             })}
 						</p>
 					)}
-					<div className="mt-2">{product.quantity <= 0 && <div>Out of stock</div>}</div>
+					<div className="mt-2">
+                        {
+                            product.quantity > 0 ? (
+                                <p>Stock: {product.quantity}</p>
+                            ) : (
+                                <div>Out of stock</div>
+                            )
+                        }
+                    </div>
 				</div>
                 
                 <div className="lg:col-span-7 lg:row-span-3 lg:row-start-1">

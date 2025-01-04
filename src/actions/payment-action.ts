@@ -3,11 +3,11 @@ import { Payment } from "@/models/payment";
 
 const paymentService = 'PAYMENT_SERVICE';
 
-interface PaymentResponse {
-    code: number;
-    data: Payment;
-    message: string;
-}
+// interface PaymentResponse {
+//     code: number;
+//     data: Payment;
+//     message: string;
+// }
 
 export interface createPaymentRequest {
     orderId: string;
@@ -17,9 +17,6 @@ export interface createPaymentRequest {
 
 export async function uploadPaymentAction(data: createPaymentRequest, accessToken: string): Promise<void> {
     var paymentServiceBaseURL = getBaseUrl(paymentService)
-    if (!paymentServiceBaseURL) {
-        paymentServiceBaseURL = process.env.NEXT_PUBLIC_PAYMENT_SERVICE || "http://localhost:2006"
-    }
 
     const formData = new FormData();
     formData.append('orderId', data.orderId);
