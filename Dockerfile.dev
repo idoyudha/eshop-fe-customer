@@ -12,8 +12,6 @@ ENV WATCHPACK_POLLING=true
 COPY package*.json ./
 RUN npm install
 
-COPY .env.local .env.local
-
 # Copy the rest of the application
 COPY . .
 

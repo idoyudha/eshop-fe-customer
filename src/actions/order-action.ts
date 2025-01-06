@@ -1,5 +1,5 @@
 import { getBaseUrl } from "@/lib/utils";
-import { Order, OrderView } from "@/models/order";
+import { OrderView } from "@/models/order";
 
 const orderService = 'ORDER_SERVICE';
 
@@ -10,11 +10,7 @@ interface OrdersResponse {
 }
 
 export async function getOrdersAction(accessToken: string): Promise<OrderView[]> {
-    var orderServiceBaseUrl = getBaseUrl(orderService)
-    if (!orderServiceBaseUrl) {
-        orderServiceBaseUrl = process.env.NEXT_PUBLIC_ORDER_SERVICE || "http://localhost:2003"
-    }
-
+    const orderServiceBaseUrl = getBaseUrl(orderService)
     const response = await fetch(`${orderServiceBaseUrl}/v1/orders/user`, {
         method: 'GET',
         headers: {
@@ -43,7 +39,7 @@ interface OrderResponse {
 }
 
 export async function getOrderAction(accessToken: string, id: string): Promise<OrderView> {
-    var orderServiceBaseUrl = getBaseUrl(orderService)
+    const orderServiceBaseUrl = getBaseUrl(orderService)
     const response = await fetch(`${orderServiceBaseUrl}/v1/orders/${id}`, {
         method: 'GET',
         headers: {

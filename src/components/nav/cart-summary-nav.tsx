@@ -2,7 +2,7 @@
 
 import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
 import { ShoppingBagIcon } from "lucide-react";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import { CartLink } from "./cart-link";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { useCart } from "@/context/cart-modal";

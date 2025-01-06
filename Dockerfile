@@ -12,21 +12,24 @@ RUN npm ci
 # Step 2: Build stage
 FROM node:20.13.1-slim AS builder
 WORKDIR /app
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV=production
+
+# Build arguments
+ARG NEXT_TELEMETRY_DISABLED=1
+ARG NEXT_SKIP_PREFETCH=1
+ARG NEXT_BUILD_STANDALONE=true 
 
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Copy env file
-COPY .env.local .env.local
+COPY .env .env
 
 # Build the application
 RUN npm run build
 
 # Step 3: Production stage
-FROM node:20.13.1-slim AS runner
+FROM node:20.13.1-slim AS production
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -36,8 +39,7 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 # Copy necessary files from builder
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/next.config.mjs ./
 COPY --from=builder /app/package.json ./package.json
 
 # Special directory setup for Next.js standalone

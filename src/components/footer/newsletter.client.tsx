@@ -29,6 +29,7 @@ export const Newsletter = () => {
                         })
 					}
 				} catch (error) {
+					console.error(error);
 					toast({
                         description: "error",
                     })

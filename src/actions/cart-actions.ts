@@ -12,10 +12,7 @@ interface CartsResponse {
 
 export async function getCartAction(accessToken: string): Promise<Cart[]> {
 	try {
-		var cartServiceBaseUrl = getBaseUrl(cartService)
-		if (!cartServiceBaseUrl) {
-			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
-		}
+		const cartServiceBaseUrl = getBaseUrl(cartService)
 
 		const response = await fetch(`${cartServiceBaseUrl}/v1/carts/user`, {
             method: 'GET',
@@ -58,10 +55,7 @@ export interface createCartRequest {
 
 export async function addToCartAction(data: createCartRequest, accessToken: string): Promise<Cart | null> {
 	try {
-		var cartServiceBaseUrl = getBaseUrl(cartService)
-		if (!cartServiceBaseUrl) {
-			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
-		}
+		const cartServiceBaseUrl = getBaseUrl(cartService)
 		const response = await fetch(`${cartServiceBaseUrl}/v1/carts`, {
             method: 'POST',
             headers: {
@@ -95,10 +89,7 @@ export interface updateCartRequest {
 
 export async function updateCartAction(data: updateCartRequest, accessToken: string): Promise<Cart | null> {
     try {
-		var cartServiceBaseUrl = getBaseUrl(cartService)
-		if (!cartServiceBaseUrl) {
-			cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
-		}
+		const cartServiceBaseUrl = getBaseUrl(cartService)
 		const response = await fetch(`${cartServiceBaseUrl}/v1/carts/${data.cart_id}`, {
             method: 'PATCH',
             headers: {
@@ -126,11 +117,7 @@ export async function updateCartAction(data: updateCartRequest, accessToken: str
 
 export async function deleteCartAction(id: string, accessToken: string): Promise<null> {
     try {
-        var cartServiceBaseUrl = getBaseUrl(cartService)
-        // TODO: find out properly
-        if (!cartServiceBaseUrl) {
-            cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
-        }
+        const cartServiceBaseUrl = getBaseUrl(cartService)
         const response = await fetch(`${cartServiceBaseUrl}/v1/carts/${id}`, {
             method: 'DELETE',
             headers: {
@@ -156,11 +143,7 @@ export interface CartCheckoutRequest {
 }
 
 export async function checkoutCartAction(data: CartCheckoutRequest, accessToken: string): Promise<void> {
-    var cartServiceBaseUrl = getBaseUrl(cartService)
-    if (!cartServiceBaseUrl) {
-        cartServiceBaseUrl = process.env.NEXT_PUBLIC_CART_SERVICE || "http://localhost:2002"
-    }
-    
+    const cartServiceBaseUrl = getBaseUrl(cartService)
     const response = await fetch(`${cartServiceBaseUrl}/v1/carts/checkout`, {
         method: 'POST',
         headers: {

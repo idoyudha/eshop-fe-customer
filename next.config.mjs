@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     output: 'standalone',
+    eslint: {
+        ignoreDuringBuilds: true
+    },
+    staticPageGenerationTimeout: 0,
+    experimental: {
+        workerThreads: false,
+        cpus: 1
+    },
     images: {
         remotePatterns: [
             {

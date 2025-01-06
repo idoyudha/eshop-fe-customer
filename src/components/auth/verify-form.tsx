@@ -1,8 +1,8 @@
 "use client"
 
 import { useAuth } from "@/context/auth-context"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Suspense, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
 import { cn } from "@/lib/utils"
 import { Label } from "../ui/label"
@@ -12,8 +12,11 @@ import { ResendVerificationButton } from "./resend-verification-button"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react"
 
-export function VerifyForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
-    const [email, setEmail] = useState("")
+type VerifyFormProps = React.HTMLAttributes<HTMLDivElement>
+
+function VerifyFormContent({ className, ...props }: VerifyFormProps) {
+    const searchParams = useSearchParams()
+    const [username, setUsername] = useState(searchParams.get('username') || "")
     const [code, setCode] = useState("")
     const [loading, setLoading] = useState(false)
     const { toast } = useToast();
@@ -25,13 +28,14 @@ export function VerifyForm({ className, ...props }: React.ComponentPropsWithoutR
 
         try {
             setLoading(true);
-            await confirmSignupCode(email, code);
+            await confirmSignupCode(username, code);
             toast({
                 title: 'Verification successful',
                 description: 'Verification successful. You can now login.',
             })
             router.push('/auth/login');
         } catch (error) {
+            console.error('Verification error:', error);
             toast({
                 variant: 'destructive',
                 title: 'Verification failed',
@@ -55,14 +59,15 @@ export function VerifyForm({ className, ...props }: React.ComponentPropsWithoutR
                     <form onSubmit={handleConfirmSignUp}>
                         <div className="flex flex-col gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email</Label>
+                                <Label htmlFor="username">Username</Label>
                                 <Input
-                                    id="email"
-                                    type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="m@eshop.com"
+                                    id="username"
+                                    type="username"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
                                     required
+                                    readOnly
+                                    className="bg-muted"
                                 />
                             </div>
                             <div className="grid gap-2">
@@ -80,12 +85,20 @@ export function VerifyForm({ className, ...props }: React.ComponentPropsWithoutR
                             </Button>
 
                             <div className="text-center">
-                                <ResendVerificationButton username={email} />
+                                <ResendVerificationButton username={username} />
                             </div>
                         </div>
                     </form>
                 </CardContent>
             </Card>
         </div>
+    )
+}
+
+export function VerifyForm(props: VerifyFormProps) {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <VerifyFormContent {...props} />
+        </Suspense>
     )
 }
