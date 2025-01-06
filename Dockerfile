@@ -22,9 +22,6 @@ ARG NEXT_BUILD_STANDALONE=true
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Copy env file
-COPY .env .env
-
 # Build the application
 RUN npm run build
 
