@@ -45,6 +45,7 @@ jobs:
     - name: Build
       run: |
         docker build . \
+          --build-arg NEXT_PUBLIC_IMAGE_CLOUDFRONT=${{ vars.NEXT_PUBLIC_IMAGE_CLOUDFRONT }} \
           -t "${{ env.GCR_REGION }}/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" \
           -t "${{ env.GCR_REGION }}/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:latest"
       
