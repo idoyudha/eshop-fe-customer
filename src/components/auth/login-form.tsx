@@ -20,7 +20,8 @@ import { Loader2 } from "lucide-react"
 export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<"div">) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState(false)
+    const [loadingLogin, setLoadingLogin] = useState(false)
+    const [loadingGoogle, setLoadingGoogle] = useState(false)
     const { login, signInWithGoogle } = useAuth()
     const { toast } = useToast()
     const router = useRouter()
@@ -28,7 +29,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            setLoading(true);
+            setLoadingLogin(true);
             await login(email, password);
             toast({
                 title: 'Login successful',
@@ -36,20 +37,21 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             })
             router.push('/');
         } catch (error) {
-            console.error('Login error:', error);
+            let errorMessage = (error as Error).toString().split(': ')[1];
             toast({
                 variant: 'destructive',
                 title: 'Login failed',
-                description: 'Login failed. Please try again.',
+                description: `Login failed. ${errorMessage}`,
             })  
         } finally {
-            setLoading(false);
+            setLoadingLogin(false);
         }
     };
 
     const handleGoogleLogin = async (e: React.MouseEvent) => {
         e.preventDefault();
         try {
+            setLoadingGoogle(true);
             await signInWithGoogle();
         } catch (error) {
             console.error('Google login error:', error);
@@ -58,6 +60,8 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                 title: 'Login failed',
                 description: 'Login failed. Please try again.',
             })
+        } finally {
+            setLoadingGoogle(false);
         }
     };
 
@@ -103,10 +107,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
                                 />
                             </div>
                             <Button type="submit" className="w-full">
-                                {loading ? <Loader2 className="animate-spin" /> : 'Login'}
+                                {loadingLogin ? <Loader2 className="animate-spin" /> : 'Login'}
                             </Button>
                             <Button variant="outline" className="w-full" onClick={handleGoogleLogin}>
-                                {loading ? <Loader2 className="animate-spin" /> : 'Login with Google'}
+                                {loadingGoogle ? <Loader2 className="animate-spin" /> : 'Login with Google'}
                             </Button>
                         </div>
                         <div className="mt-4 text-center text-sm">

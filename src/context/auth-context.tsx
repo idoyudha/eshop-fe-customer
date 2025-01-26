@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp, resendSignUpCode, signInWithRedirect } from 'aws-amplify/auth';
 
@@ -57,6 +56,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const { isSignedIn } = await signIn({ username, password });
             if (isSignedIn) {
                 const currentUser = await getCurrentUser();
+                const session = await fetchAuthSession();
+                const userAttributes = session.tokens?.idToken?.payload;
+                const isCustomer = userAttributes?.['custom:role'] === 'customer';
+                
+                if (!isCustomer) {
+                    await signOut();
+                    throw new Error('You are not a customer');
+                }
 
                 setUser(currentUser);
                 setIsAuthenticated(true);
@@ -86,7 +93,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 options: {
                     userAttributes: {
                         email, 
-                        name
+                        name,
+                        'custom:role': 'customer'
                     },
                     autoSignIn: { 
                         enabled: true
