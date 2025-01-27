@@ -1,7 +1,7 @@
 import { CarIcon } from "lucide-react";
 import { EshopLink } from "../eshop-link";
 
-export async function CartEmpty() {
+export function CartEmpty() {
 	return (
 		<div className="flex max-h-80 flex-1 flex-col items-center justify-center gap-4">
 			<div className="flex flex-col items-center justify-center space-y-2 text-center">

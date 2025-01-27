@@ -1,6 +1,6 @@
 "use client"
 
-import { Order, OrderView } from "@/models/order";
+import { OrderView } from "@/models/order";
 import { OrderCard } from "./order-card";
 import { useAuth } from "@/context/auth-context";
 import { useCallback, useEffect, useState } from "react";
