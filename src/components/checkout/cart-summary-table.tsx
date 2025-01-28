@@ -1,44 +1,21 @@
 "use client"
 
-import { calculateCartTotalPrice, formatMoney } from "@/lib/utils";
-import { useOptimistic } from "react";
+import { formatMoney } from "@/lib/utils";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "../ui/table";
 import Image from "next/image";
 import { EshopLink } from "../eshop-link";
 import { CartAmountWithSpinner, CartItemLineTotal, CartItemQuantity } from "./cart-items.client";
-import { CartEmpty } from "./cart-empty";
-import { useCart } from "@/context/cart-modal";
+import { Cart } from "@/models/cart";
 
-export const CartSummaryTable = () => {
-    const { carts, isLoading } = useCart();
-
-    const [optimisticCart, dispatchOptimisticCartAction] = useOptimistic(
-		carts,
-		(prevCart, action: { productId: string; action: "INCREASE" | "DECREASE" }) => {
-			const modifier = action.action === "INCREASE" ? 1 : -1;
-
-			return {
-				...prevCart,
-				items: prevCart.map((cart) => {
-					if (cart.id === action.productId) {
-						return { ...cart, quantity: cart.product_quantity + modifier };
-					}
-					return cart;
-				}),
-			};
-		},
-	);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (!carts) {
-        return <CartEmpty />;
-    }
-
-    const totalPrice = calculateCartTotalPrice(optimisticCart);
-
+export const CartSummaryTable = ({
+    optimisticCart,
+    dispatchOptimisticCartAction,
+    totalPrice,
+}: {
+    optimisticCart: Cart[];
+    dispatchOptimisticCartAction: (action: { productId: string; action: "INCREASE" | "DECREASE" }) => void;
+    totalPrice: number;
+}) => {
     return (
         <form>
             <Table>

@@ -38,3 +38,7 @@ export interface OrderView {
     address: Address;
     created_at: Date;
 }
+
+export interface OrderTTL {
+    ttl_seconds: number;
+}

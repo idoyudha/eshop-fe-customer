@@ -1,6 +1,7 @@
 "use client"
 
 import { getOrderAction } from "@/actions/order-action";
+import { OrderCountdown } from "@/components/order/order-countdown";
 import { OrderStatusBadge } from "@/components/order/order-status-badge";
 import { PaymentProofUpload } from "@/components/payment/payment-proof-upload";
 import { PaymentStatusBadge } from "@/components/payment/payment-status-badge";
@@ -152,6 +153,10 @@ export default function OrderPage(props: {
                         <CardContent className="space-y-4">
                             <div className="flex items-center gap-2">
                                 <PaymentStatusBadge status={order.payment_status} />
+                                <OrderCountdown 
+                                    orderId={order.id} 
+                                    onExpire={() => fetchOrder()}
+                                />
                             </div>
                             
                             {order.payment_status === "PENDING" || order.payment_status === "" ? (
