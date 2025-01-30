@@ -21,7 +21,7 @@ export const CartSummaryNav = () => {
 	);
 };
 
-const CartSummaryNavInner = async () => {
+const CartSummaryNavInner = () => {
 	const { carts } = useCart();
 
 	if (!carts || !carts.length) {
