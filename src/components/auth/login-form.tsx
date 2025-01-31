@@ -37,7 +37,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
             })
             router.push('/');
         } catch (error) {
-            let errorMessage = (error as Error).toString().split(': ')[1];
+            const errorMessage = (error as Error).toString().split(': ')[1];
             toast({
                 variant: 'destructive',
                 title: 'Login failed',
