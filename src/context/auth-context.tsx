@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react";
-import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp, resendSignUpCode, signInWithRedirect } from 'aws-amplify/auth';
+import { getCurrentUser, signOut, signIn, AuthUser, fetchAuthSession, signUp, confirmSignUp, resendSignUpCode, signInWithRedirect, updateUserAttributes } from 'aws-amplify/auth';
 
 interface AuthContextType {
     isAuthenticated: boolean;

@@ -7,6 +7,7 @@ import { PaymentProofUpload } from "@/components/payment/payment-proof-upload";
 import { PaymentStatusBadge } from "@/components/payment/payment-status-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/context/auth-context";
+import { useToast } from "@/hooks/use-toast";
 import { formatMoney } from "@/lib/utils";
 import { OrderView } from "@/models/order";
 import Image from "next/image";
@@ -21,6 +22,7 @@ export default function OrderPage(props: {
     const [isLoading, setIsLoading] = useState(true);
     const [subtotal, setSubtotal] = useState(0);
     const [shippingFee, setShippingFee] = useState(0);
+    const { toast } = useToast()
 
     const fetchOrder = useCallback(async () => {
         try {
@@ -38,6 +40,11 @@ export default function OrderPage(props: {
         } catch (error) {
             setOrder(null);
             console.error('Error fetching order:', error);
+            toast({
+                variant: 'destructive',
+                title: 'Fetcing order failed',
+                description: `Fetcing order failed. ${error}`,
+            })
         } finally {
             setIsLoading(false);
         }
